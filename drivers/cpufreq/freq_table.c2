@@ -237,4 +237,3 @@ EXPORT_SYMBOL_GPL(cpufreq_frequency_get_table);
 MODULE_AUTHOR ("Dominik Brodowski <linux@brodo.de>");
 MODULE_DESCRIPTION ("CPUfreq frequency table helpers");
 MODULE_LICENSE ("GPL");
-

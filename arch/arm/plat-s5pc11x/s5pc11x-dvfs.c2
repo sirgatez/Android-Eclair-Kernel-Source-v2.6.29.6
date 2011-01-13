@@ -97,10 +97,9 @@ static unsigned char transition_state_1GHZ[][2] = {
         {3, 1},
         {4, 1},
         {5, 2},
-	{6, 2},
-	{6, 2}
+		{6, 2},
+		{6, 2}
 };
-
 
 /* frequency */
 static struct cpufreq_frequency_table s5pc110_freq_table_800MHZ[] = {
@@ -805,4 +804,3 @@ static int __init s5pc110_cpufreq_init(void)
 }
 
 arch_initcall(s5pc110_cpufreq_init);
-

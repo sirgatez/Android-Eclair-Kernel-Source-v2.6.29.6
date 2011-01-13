@@ -2369,11 +2369,11 @@ static int ce147_get_snapshot_data(struct v4l2_subdev *sd)
 static int ce147_set_capture_config(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 {
 	int err;
-	//struct ce147_state *state = to_state(sd);
+	struct i2c_client *client = v4l2_get_subdevdata(sd);
+	struct ce147_state *state = to_state(sd);
 
 
 #ifdef FEATURE_AE_TARGETING        // sunggeun DG04 ATLAS
-         struct i2c_client *client = v4l2_get_subdevdata(sd);
          if(Flash_Mode == FLASH_MODE_ON){
              err = ce147_set_ae_targeting(sd, 1);       // on
     	    if(err < 0){
@@ -4047,7 +4047,6 @@ static int ce147_get_auto_focus_status(struct v4l2_subdev *sd, struct v4l2_contr
          if(ctrl->value == 2 && state->continuous_shot == CONTINUOUS_SHOT_OFF) //hjkang_DH19
         {
             ce147_msg(&client->dev, "%s: lock\n", __func__);
-
             err = ce147_set_awb_lock(sd, 1);
             if(err < 0){
                 dev_err(&client->dev, "%s: failed: ce147_set_awb_lock, err %d\n", __func__, err);

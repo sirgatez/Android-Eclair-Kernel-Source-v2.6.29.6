@@ -1108,8 +1108,8 @@ long pwc_video_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 			if (buf->memory != V4L2_MEMORY_MMAP)
 				return -EINVAL;
 		//Breaks Video Camera SGVG
-		//	if (buf->index >= pwc_mbufs)
-			if (buf->index < 0 || buf->index >= pwc_mbufs)
+			//if (buf->index < 0 || buf->index >= pwc_mbufs)
+			if (buf->index >= pwc_mbufs)
 				return -EINVAL;
 
 			buf->flags |= V4L2_BUF_FLAG_QUEUED;

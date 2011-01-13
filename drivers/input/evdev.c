@@ -10,7 +10,7 @@
 
 #define EVDEV_MINOR_BASE	64
 #define EVDEV_MINORS		32
-#define EVDEV_BUFFER_SIZE	(64*10) //64
+#define EVDEV_BUFFER_SIZE	(64*10)
 
 #include <linux/poll.h>
 #include <linux/slab.h>

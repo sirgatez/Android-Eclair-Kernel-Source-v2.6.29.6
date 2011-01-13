@@ -408,7 +408,10 @@ int s5pc11x_clk_set_rate(struct clk *clk, unsigned int target_freq,
 {
 	int cur_freq;
 	unsigned int mask;
-	u32 val, reg;
+#if 0
+	u32 reg;
+#endif
+	u32 val;
 	u32 size;
 	const u32 (*s5p_sysout_clk_tab)[4];
 	const u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
@@ -1372,7 +1375,7 @@ static struct clk_sources clkset_csis = {
 	.sources	= clkset_csis_list,
 	.nr_sources	= ARRAY_SIZE(clkset_csis_list),
 };
-
+#if 0
 static struct clk *clkset_pwi_list[] = {
 	&clk_srclk,
 	&clk_mout_epll.clk,
@@ -1384,7 +1387,7 @@ static struct clk_sources clkset_pwi = {
 	.sources	= clkset_pwi_list,
 	.nr_sources	= ARRAY_SIZE(clkset_pwi_list),
 };
-
+#endif
 /* The peripheral clocks are all controlled via clocksource followed
  * by an optional divider and gate stage. We currently roll this into
  * one clock which hides the intermediate clock from the mux.
@@ -2462,4 +2465,3 @@ void __init s5pc110_register_clocks(void)
 		}
 	}
 }
-

@@ -404,7 +404,7 @@ static int max8998_consumer_remove(struct platform_device *pdev)
 }
 
 unsigned int universal_sdhci2_detect_ext_cd(void);
-extern short int get_headset_status();
+extern short int get_headset_status(void);
 
 //defined sec_jack.h
 enum
@@ -516,4 +516,3 @@ MODULE_AUTHOR("Amit Daniel");
 MODULE_DESCRIPTION("MAX 8998 consumer driver");
 MODULE_LICENSE("GPL");
 MODULE_ALIAS("platform:max8998-consumer");
-

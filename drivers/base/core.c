@@ -1348,7 +1348,12 @@ struct device *device_create_vargs(struct class *class, struct device *parent,
 	dev->release = device_create_release;
 	dev_set_drvdata(dev, drvdata);
 
-	vsnprintf(dev->bus_id, BUS_ID_SIZE, fmt, args);
+#ifdef CONFIG_KEYPAD_CYPRESS_TOUCH_USE_BLN
+	//locally changed  BUS_ID_SIZE to 22, to allow longer device names -> backlightnotification
+	vsnprintf(dev->bus_id, 22, fmt, args);
+#else
+ 	vsnprintf(dev->bus_id, BUS_ID_SIZE, fmt, args);
+#endif
 	retval = device_register(dev);
 	if (retval)
 		goto error;

@@ -793,7 +793,9 @@ int set_usb_mtp_mode(bool mode)
 
 static void disable_mtp(struct android_dev *dev)
 {
-	//int ret;
+#ifdef VODA
+	int ret;
+#endif
 	
 	if (dev->cdev && dev->cdev->gadget) {
 	usb_gadget_disconnect(dev->cdev->gadget);
