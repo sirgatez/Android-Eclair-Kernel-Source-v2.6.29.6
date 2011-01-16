@@ -62,16 +62,16 @@ extern void set_low_bat_interrupt(int on);	// lobat pwroff
 extern void charging_stop_without_magic_number(void); // hanapark_DF01
 
 #ifdef __VZW_AUTH_CHECK__
-//static int verizon_batt_auth_full_check(void);
-//static int verizon_batt_auth_check(void);
-//static int verizon_batt_auth_multi_check(void);
+static int verizon_batt_auth_full_check(void);
+static int verizon_batt_auth_check(void);
+static int verizon_batt_auth_multi_check(void);
 
 extern int Reset_TA(void);
 extern int CRC_protection(void);
 extern int rom_code_protection(void);
 
 int batt_auth_check;
-//static int batt_auth_full_check = 0; 
+static int batt_auth_full_check = 0; 
 #endif
 
 unsigned char maxim_chg_status(void);
@@ -1118,10 +1118,6 @@ static ssize_t s3c_bat_show_property(struct device *dev,
 #endif /* __TEMP_BLOCK_EXCEPTION__ */
 #ifdef __VZW_AUTH_CHECK__
 	case AUTH_BATTERY:
-		//We lie, nothing wrong here...move along...
-		i += scnprintf(buf + i, PAGE_SIZE - i, "%d\n", 1);
-		break;
-#if 0
 #if 0
 		i += scnprintf(buf + i, PAGE_SIZE - i, "%d\n",
 			s3c_bat_check_v_f());	// hanapark_DD15
@@ -1129,7 +1125,9 @@ static ssize_t s3c_bat_show_property(struct device *dev,
 		// hanapark_DH13 (battery auth : 1 5 test)
 		if (s3c_get_bat_health() == POWER_SUPPLY_HEALTH_UNSPEC_FAILURE)
 		{
-			i += scnprintf(buf + i, PAGE_SIZE - i, "%d\n", 0);
+			//We lie, nothing wrong here...move along...
+			//i += scnprintf(buf + i, PAGE_SIZE - i, "%d\n", 0);
+			i += scnprintf(buf + i, PAGE_SIZE - i, "%d\n", 1);
 		}
 		else
 		{
@@ -1138,7 +1136,6 @@ static ssize_t s3c_bat_show_property(struct device *dev,
 #endif
 
 		break;
-#endif
 #endif
         default:
                 i = -EINVAL;
@@ -1149,7 +1146,7 @@ static ssize_t s3c_bat_show_property(struct device *dev,
 
 static void s3c_bat_set_vol_cal(int batt_cal)
 {
-	//int max_cal = 4096;
+	int max_cal = 4096;
 
 	if (!batt_cal)
 		return;
@@ -1453,14 +1450,13 @@ extern u8 FSA9480_Get_JIG_OnOff_Status(void);	// hanapark_DH16
 
 static unsigned int s3c_bat_check_v_f(void)
 {
-	//We lie, nothing wrong here...move along...
-	s3c_set_bat_health(POWER_SUPPLY_HEALTH_GOOD);
-	return 1;
-
-#if 0
 #ifdef __VZW_AUTH_CHECK__
 	int retval = 0;
 	static int jig_status = 0;	// hanapark_DH18
+
+	//We lie, nothing wrong here...move along...
+	s3c_set_bat_health(POWER_SUPPLY_HEALTH_GOOD);
+	return 1;
 
 	if (FSA9480_Get_JIG_OnOff_Status() == 1)	// hanapark_DH16
 	{
@@ -1511,6 +1507,11 @@ static unsigned int s3c_bat_check_v_f(void)
 
 //	dev_info(dev, "%s: V_F ADC = %d\n", __func__, adc);
 
+
+	//We lie, nothing wrong here...move along...
+	rc = 1;
+	return rc;
+
 	if (adc <= BATT_VF_MAX && adc >= BATT_VF_MIN) {
 		 //s3c_set_bat_health(POWER_SUPPLY_HEALTH_GOOD);
 		rc = 1;
@@ -1522,7 +1523,6 @@ static unsigned int s3c_bat_check_v_f(void)
 
 	return rc;
 #endif	/* __VZW_AUTH_CHECK__ */
-#endif
 }
 
 static void s3c_cable_check_status(void)
@@ -1659,10 +1659,11 @@ static void s3c_cable_work(struct work_struct *work)
 }
 
 #ifdef __VZW_AUTH_CHECK__
-#if 0
 static int verizon_batt_auth_full_check(void)
 {
 	int retval = 0;
+	retval = 1;
+	return retval;
 
 	if (Reset_TA())
 	{
@@ -1689,6 +1690,8 @@ static int verizon_batt_auth_multi_check(void)
 {
 	int i;
 	int retval = 0;
+	retval = 1;
+	return retval;
 
 	for (i = 0; i < 3 ; i++)
 	{
@@ -1705,6 +1708,7 @@ static int verizon_batt_auth_multi_check(void)
 static int verizon_batt_auth_check(void)
 {
 	int result = 0;
+	return 1;
 
 	if (!Reset_TA())
 	{
@@ -1717,7 +1721,6 @@ static int verizon_batt_auth_check(void)
 
 	return result;
 }
-#endif
 #endif	/* __VZW_AUTH_CHECK__ */
 
 #ifdef CONFIG_PM

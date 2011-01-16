@@ -510,7 +510,6 @@ static void s3c_rtc_enable(struct platform_device *pdev, int en)
 	if (!en) {
 		tmp = readb(base + S3C2410_RTCCON);
 		writeb(tmp & ~ (S3C2410_RTCCON_RTCEN | S3C_RTCCON_TICEN), base + S3C2410_RTCCON);
-///May fail next? SG
 		tmp = readb(base + S3C2410_RTCCON);
 		writeb(tmp & ~ (S3C2410_RTCCON_RTCEN | S3C_RTCCON_TICEN), base + S3C2410_TICNT);
 	} else {

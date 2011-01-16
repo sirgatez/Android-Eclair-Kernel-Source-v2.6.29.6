@@ -131,13 +131,13 @@ static struct cpufreq_frequency_table *s5pc110_freq_table[] = {
 
 static unsigned int s5pc110_thres_table_1GHZ[][2] = {
 //	down threshold, up threshold
-        {65, 90},
-        {60, 85},
-        {50, 80},
-        {50, 80},
-        {30, 75},
-        {30, 75},
-        {30, 75},
+        {60, 70},
+        {55, 90},
+        {50, 85},
+        {50, 85},
+        {35, 85},
+        {35, 85},
+        {35, 85},
 };
 
 static unsigned int s5pc110_thres_table_800MHZ[][2] = {
@@ -721,8 +721,7 @@ static int __init s5pc110_cpu_init(struct cpufreq_policy *policy)
 		return -EINVAL;
 
 	//policy->cur = policy->min = policy->max = s5pc110_getspeed(0); //1000000
-	//policy->cur = policy->min = policy->max = policy->user_policy.max = policy->cpuinfo.max_freq = 1000000; //s5pc110_getspeed(0);
-	policy->cur = policy->min = policy->max = policy->user_policy.max = 1000000; //s5pc110_getspeed(0);
+	policy->cur = policy->min = policy->max = policy->user_policy.max = policy->cpuinfo.max_freq = 1000000; //s5pc110_getspeed(0);
 
 	//spin_lock_irqsave(&g_cpufreq_lock, irqflags);
 #if 0//boot 800Mhz, kernel 1Ghz

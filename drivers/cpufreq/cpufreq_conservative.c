@@ -34,8 +34,8 @@
  * It helps to keep variable names smaller, simpler
  */
 
-#define DEF_FREQUENCY_UP_THRESHOLD		(70) //80
-#define DEF_FREQUENCY_DOWN_THRESHOLD		(30) //20
+#define DEF_FREQUENCY_UP_THRESHOLD		(70) //60 70 80
+#define DEF_FREQUENCY_DOWN_THRESHOLD		(30) //40 30 20
 
 #ifdef CONFIG_CPU_S5PC110
 #define DEF_SAMPLING_FREQ_STEP  20

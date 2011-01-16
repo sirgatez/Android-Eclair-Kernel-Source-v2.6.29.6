@@ -470,7 +470,12 @@ static void __init free_unused_memmap_node(int node, struct meminfo *mi)
 		if (prev_bank_end && prev_bank_end != bank_start)
 			free_memmap(node, prev_bank_end, bank_start);
 
-		prev_bank_end = bank_pfn_end(bank);
+		/*
+		 * Align up here since the VM subsystem insists that the
+		 * memmap entries are valid from the bank end aligned to
+		 * MAX_ORDER_NR_PAGES.
+		 */
+		prev_bank_end = ALIGN(bank_pfn_end(bank), MAX_ORDER_NR_PAGES);
 	}
 }
 
