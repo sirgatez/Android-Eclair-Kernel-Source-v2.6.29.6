@@ -475,7 +475,9 @@ static void __init free_unused_memmap_node(int node, struct meminfo *mi)
 		 * memmap entries are valid from the bank end aligned to
 		 * MAX_ORDER_NR_PAGES.
 		 */
-		prev_bank_end = ALIGN(bank_pfn_end(bank), MAX_ORDER_NR_PAGES);
+		//prev_bank_end = ALIGN(bank_pfn_end(bank), MAX_ORDER_NR_PAGES);
+		prev_bank_end = bank_pfn_end(bank);
+
 	}
 }
 

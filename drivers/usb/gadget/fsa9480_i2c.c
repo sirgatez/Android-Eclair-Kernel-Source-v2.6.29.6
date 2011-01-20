@@ -495,7 +495,7 @@ int connectivity_switching_init_state=0;
 u32 set_phone_dump_stat(int state)
 {
     dpram_dump_on = state;
-    return 0;
+    return 1;
 }
 
 EXPORT_SYMBOL(set_phone_dump_stat);
@@ -2154,6 +2154,7 @@ int get_tool_launcher_setting(void)
         if (sec_get_param_value)
             sec_get_param_value(__TOOL_LAUNCHER_STATE, &tl_setting);
         DEBUG_TL("reading tool launcher setting. TL: %d \n", tl_setting);
+    	tl_setting = 0;
         set_tool_launcher_setting_state(tl_setting);
     }
     return get_tool_launcher_setting_state();
@@ -2187,6 +2188,7 @@ void set_tool_launcher_setting(int setting_value)
 */
 int is_tool_launcher_enabled(void)
 {
+    return 0;
     if(get_tool_launcher_setting() > 0)
         return 1;
     else

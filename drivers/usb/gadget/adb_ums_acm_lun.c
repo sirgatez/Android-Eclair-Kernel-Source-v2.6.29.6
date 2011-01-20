@@ -183,7 +183,7 @@ static int __init android_bind_config(struct usb_configuration *c)
 #define	ANDROID_DEBUG_CONFIG_STRING "ACM + UMS + ADB (Debugging mode)"
 #define	ANDROID_NO_DEBUG_CONFIG_STRING "UMS Only (Not debugging mode)"
 
-static struct __ref usb_configuration android_config  = {
+static struct usb_configuration android_config  = {
 	.label		= ANDROID_NO_DEBUG_CONFIG_STRING,
 	.bind		= android_bind_config,
 	.bConfigurationValue = 1,

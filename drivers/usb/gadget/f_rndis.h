@@ -19,6 +19,6 @@
 
 #define ETH_ALEN	6		/* Octets in one ethernet addr	 */
 int rndis_function_add(struct usb_configuration *c, u8 ethaddr[ETH_ALEN]);
-int __ref rndis_function_config_changed(struct usb_composite_dev *cdev,	struct usb_configuration *c);
+int rndis_function_config_changed(struct usb_composite_dev *cdev,	struct usb_configuration *c);
 
 #endif /* __F_ACM_H */

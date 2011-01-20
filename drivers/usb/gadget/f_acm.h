@@ -20,7 +20,7 @@
 #define __F_ACM_H
 
 int acm_function_add(struct usb_configuration *c);
-int __ref acm_function_config_changed(struct usb_composite_dev *cdev,
+int acm_function_config_changed(struct usb_composite_dev *cdev,
 	struct usb_configuration *c);
 
 #endif /* __F_ACM_H */

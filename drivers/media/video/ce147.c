@@ -57,65 +57,66 @@
 #define DEFAULT_PIX_FMT		V4L2_PIX_FMT_UYVY	/* YUV422 */
 #define DEFUALT_MCLK		24000000
 #define POLL_TIME_MS		10
+#define WAIT_TIME_MS		10
 
 /* Camera ISP command */
-#define CMD_VERSION			0x00
-#define DATA_VERSION_FW		0x00
-#define DATA_VERSION_DATE	0x01
+#define CMD_VERSION						0x00
+#define DATA_VERSION_FW					0x00
+#define DATA_VERSION_DATE				0x01
 #define CMD_GET_BATCH_REFLECTION_STATUS	0x02
-#define DATA_VERSION_SENSOR	0x03
-#define CMD_HD_PREVIEW		0x03
-#define CMD_SET_WB			0x04
-#define DATA_VERSION_AF		0x05
-#define CMD_SET_FLASH_MANUAL	0x06
-#define CMD_AE_TARGETING           0x10             // sunggeun DG04 ATLAS
-#define CMD_AE_WB_LOCK		0x11
-#define CMD_SET_ANTI_BANDING	0x14
-#define CMD_SET_WB_AUTO		0x1A
-#define CMD_SET_AUTO_FOCUS_MODE 0x20
-#define CMD_START_AUTO_FOCUS_SEARCH 0x23
-#define CMD_CHECK_AUTO_FOCUS_SEARCH 0x24
-#define CMD_STOP_LENS_MOVEMENT 0x35
-#define CMD_SET_EFFECT		0x3D
-#define CMD_SET_TOUCH_AUTO_FOCUS 0x4D
-#define CMD_START_OT		0x50
-#define CMD_CHECK_OT		0x51
-#define CMD_PREVIEW_SIZE	0x54
-#define CMD_FPS				0x5A
-#define CMD_SET_ANTI_SHAKE	0x5B
-#define CMD_SET_DATA		0x65
-#define CMD_DATA_OUT_REQ	0x66
-#define CMD_PREVIEW			0x6B
-#define	CMD_PREVIEW_STATUS	0x6C
-#define CMD_CAPTURE_SIZE	0x73
-#define CMD_BUFFERING_CAPTURE	0x74
-#define CMD_SET_SMART_AUTO  0x82
-#define CMD_GET_SMART_AUTO_STATUS 0x83
-#define CMD_SET_WDR			0x88
-#define CMD_JPEG_SIZE		0x8E
-#define CMD_JPEG_BUFFERING	0x8F
-#define CMD_JPEG_CONFIG		0x90
-#define CMD_SET_FACE_DETECTION 0x9A
-#define CMD_SET_FACE_LOCK 	0x9C
-#define CMD_INFO_EXIF		0xA0
-#define CMD_INFO_MODEL		0xA1
-#define CMD_INFO_ROT		0xA2
+#define DATA_VERSION_SENSOR				0x03
+#define CMD_HD_PREVIEW					0x03
+#define CMD_SET_WB						0x04
+#define DATA_VERSION_AF					0x05
+#define CMD_SET_FLASH_MANUAL			0x06
+#define CMD_AE_TARGETING				0x10 // sunggeun DG04 ATLAS
+#define CMD_AE_WB_LOCK					0x11
+#define CMD_SET_ANTI_BANDING			0x14
+#define CMD_SET_WB_AUTO					0x1A
+#define CMD_SET_AUTO_FOCUS_MODE			0x20
+#define CMD_START_AUTO_FOCUS_SEARCH		0x23
+#define CMD_CHECK_AUTO_FOCUS_SEARCH		0x24
+#define CMD_STOP_LENS_MOVEMENT			0x35
+#define CMD_SET_EFFECT					0x3D
+#define CMD_SET_TOUCH_AUTO_FOCUS		0x4D
+#define CMD_START_OT					0x50
+#define CMD_CHECK_OT					0x51
+#define CMD_PREVIEW_SIZE				0x54
+#define CMD_FPS							0x5A
+#define CMD_SET_ANTI_SHAKE				0x5B
+#define CMD_SET_DATA					0x65
+#define CMD_DATA_OUT_REQ				0x66
+#define CMD_PREVIEW						0x6B
+#define	CMD_PREVIEW_STATUS				0x6C
+#define CMD_CAPTURE_SIZE				0x73
+#define CMD_BUFFERING_CAPTURE			0x74
+#define CMD_SET_SMART_AUTO				0x82
+#define CMD_GET_SMART_AUTO_STATUS		0x83
+#define CMD_SET_WDR						0x88
+#define CMD_JPEG_SIZE					0x8E
+#define CMD_JPEG_BUFFERING				0x8F
+#define CMD_JPEG_CONFIG					0x90
+#define CMD_SET_FACE_DETECTION			0x9A
+#define CMD_SET_FACE_LOCK				0x9C
+#define CMD_INFO_EXIF					0xA0
+#define CMD_INFO_MODEL					0xA1
+#define CMD_INFO_ROT					0xA2
 #define CMD_INFO_LONGITUDE_LATITUDE		0xA3
-#define CMD_INFO_ALTITUDE		0xA4
-#define CMD_SET_FLASH		0xB2
-#define CMD_SET_FLASH_POWER 0xB3        // sunggeun DG12 ATLAS
-#define CMD_SET_DZOOM		0xB9
-#define CMD_GET_DZOOM_LEVEL 0xBA
-#define CMD_SET_EFFECT_SHOT 0xC0
-#define DATA_VERSION_GAMMA	0x0E0
-#define DATA_VERSION_SENSOR_MAKER 0xE0
-#define CMD_CHECK_DATALINE	0xEC
-#define CMD_INIT			0xF0
-#define CMD_FW_INFO			0xF2
-#define CMD_FWU_UPDATE		0xF3
-#define CMD_FW_UPDATE		0xF4
-#define CMD_FW_STATUS		0xF5
-#define CMD_FW_DUMP			0xFB
+#define CMD_INFO_ALTITUDE				0xA4
+#define CMD_SET_FLASH					0xB2
+#define CMD_SET_FLASH_POWER				0xB3 // sunggeun DG12 ATLAS
+#define CMD_SET_DZOOM					0xB9
+#define CMD_GET_DZOOM_LEVEL				0xBA
+#define CMD_SET_EFFECT_SHOT				0xC0
+#define DATA_VERSION_GAMMA				0x0E0
+#define DATA_VERSION_SENSOR_MAKER		0xE0
+#define CMD_CHECK_DATALINE				0xEC
+#define CMD_INIT						0xF0
+#define CMD_FW_INFO						0xF2
+#define CMD_FWU_UPDATE					0xF3
+#define CMD_FW_UPDATE					0xF4
+#define CMD_FW_STATUS					0xF5
+#define CMD_FW_DUMP						0xFB
 
 #define CE147_FW_F2_PATH	"/system/firmware/CE147F02.bin"
 
@@ -244,7 +245,7 @@ struct ce147_position {
 	int y;
 } ; 
 
-struct ce147_gps_info{
+struct ce147_gps_info {
 	unsigned char ce147_gps_buf[8];
 	unsigned char ce147_altitude_buf[4];
 	long gps_timeStamp;
@@ -691,7 +692,7 @@ static int ce147_get_batch_reflection_status(struct v4l2_subdev *sd)
 	//To Do: This code needs timeout API for do-while
 	do
 	{
-		msleep(10); 
+		msleep(WAIT_TIME_MS); 
         err = ce147_i2c_read_multi(client, CMD_GET_BATCH_REFLECTION_STATUS, NULL, 0, &ce147_batch_ref_status, 1);
 		if(err < 0){
 			dev_err(&client->dev, "%s: failed: i2c_read for get_batch_reflection_status\n", __func__);
@@ -728,7 +729,7 @@ static int ce147_read_fw_bin(const char *path, char *fwBin, int *fwSize)
 
 	filep = filp_open(path, O_RDONLY, 0) ;
 
-	//	if (filep && (filep!= 0xfffffffe))
+	//if (filep && (filep!= 0xfffffffe))
 	if (filep)
 	{
 		old_fs = get_fs();
@@ -835,14 +836,14 @@ static int ce147_load_fw(struct v4l2_subdev *sd)
         /** Just before this function call, we enable the power and clock. Hence
 	 *  we need to wait for some time before we can start communicating with the sensor.
 	 */
-        msleep(100);//SecFeature.Camera aswoogi
+        msleep(200);//SecFeature.Camera aswoogi
 
         err = ce147_i2c_write_multi(client, CMD_INIT, ce147_regbuf_init, ce147_reglen_init);
         if(err < 0)
                 return -EIO;
 
         /* Delay required to load the firmware */
-        msleep(1100); //hjkang_DH06 //SecFeature.Camera aswoogi
+        msleep(1200); //hjkang_DH06 //SecFeature.Camera aswoogi
 
 	state->runmode = CE147_RUNMODE_IDLE;
 
@@ -1065,7 +1066,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 	        return -EIO;
     }
 
-	msleep(100);
+	msleep(200);
 
 	// [1] set fw updater info
     err = ce147_i2c_write_multi(client, CMD_FW_INFO, fw_buf[0], 4);
@@ -1073,7 +1074,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 			dev_err(&client->dev, "%s: failed: i2c_write for 0xf2, fw_size[0]: %d, fw_buf[0]: 0x%02x\n", __func__, fw_size[0], fw_buf[0]);
 	        return -EIO;
     }
-    msleep(100);
+    msleep(200);
 
 	//printk("ce147_update_fw: i2c_write for 0xf2, fw_size[0]: %d, fw_buf[0]: 0x%02x\n", fw_size[0], fw_buf[0]);
 
@@ -1087,7 +1088,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 				dev_err(&client->dev, "%s: fail: i2c_read for 0xf3, data: 0x%02x\n", __func__, data[0]);
                 return -EIO;
         }
-		msleep(10);
+		msleep(WAIT_TIME_MS);
 		j = j + 129;
 		//printk("ce147_update_fw: i2c_read for 0xf3, data: 0x%02x, count: %d\n", data[0], k);		
 	}
@@ -1095,7 +1096,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 	k = 0;
 	// [3] get fw status
 	do {
-		msleep(100);
+		msleep(200);
 					
 		err = ce147_i2c_read_multi(client, CMD_FW_STATUS, NULL, 0, &res, 1);
         	if(err < 0){
@@ -1108,7 +1109,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 		if(k == 500) break;
 	} while(res != 0x05);
 
-	msleep(500);
+	msleep(600);
 
 	fw_size[2] = 4;
 
@@ -1118,7 +1119,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 			dev_err(&client->dev, "%s: failed: i2c_write for 0xf2, fw_size[2]: %d, fw_buf[2]: 0x%02x\n", __func__, fw_size[2], fw_buf[2]);
 			return -EIO;
 	}
-	msleep(100);
+	msleep(200);
 
 	//printk("ce147_update_fw: i2c_write for 0xf2, fw_size[2]: %d, fw_buf[2]: 0x%02x\n", fw_size[2], fw_buf[2]);	
 
@@ -1139,7 +1140,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 
 		//printk("ce147_update_fw: i2c_write for 0xf4, data2: 0x%02x, count: %d\n", data2[0], l);
 		
-		msleep(10);
+		msleep(WAIT_TIME_MS);
 		j = j + 129;
 	}
 	
@@ -1303,7 +1304,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 			dev_err(&client->dev, "%s: failed: i2c_write for 0xf2, fw_size[0]: %d, fw_buf[0]: 0x%02x\n", __func__, fw_size[0], fw_buf[0]);
 	        return -EIO;
     }
-    msleep(100);
+    msleep(200);
 
 	//printk("ce147_update_fw: i2c_write for 0xf2, fw_size[0]: %d, fw_buf[0]: 0x%02x\n", fw_size[0], fw_buf[0]);
 
@@ -1317,7 +1318,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 				dev_err(&client->dev, "%s: fail: i2c_read for 0xf3, data: 0x%02x\n", __func__, data[0]);
                 return -EIO;
         }
-		msleep(10);
+		msleep(WAIT_TIME_MS);
 		j = j + 129;
 		//printk("ce147_update_fw: i2c_read for 0xf3, data: 0x%02x, count: %d\n", data[0], k);		
 	}
@@ -1325,7 +1326,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 	k = 0;
 	// [3] get fw status
 	do {
-		msleep(100);
+		msleep(200);
 					
 		err = ce147_i2c_read_multi(client, CMD_FW_STATUS, NULL, 0, &res, 1);
         	if(err < 0){
@@ -1338,7 +1339,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 		if(k == 500) break;
 	} while(res != 0x05);
 
-	msleep(500);
+	msleep(600);
 
 	// [4] change from dump mode
 	err = ce147_i2c_write_multi(client, CMD_FW_DUMP, dump, 1);
@@ -1346,7 +1347,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 			dev_err(&client->dev, "%s: failed: i2c_write for 0xfb, 0x00", __func__);
 			return -EIO;
 	}
-	msleep(100);
+	msleep(200);
 
 	dump[0] = 0x02;
 
@@ -1362,7 +1363,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 		return -EIO;
 	}	
 
-	msleep(100);
+	msleep(200);
 
 	// [6] set dump start address
 	err = ce147_i2c_write_multi(client, CMD_FW_DUMP, addr, addr_len);
@@ -1370,7 +1371,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 			dev_err(&client->dev, "%s: failed: i2c_write for 0xfb, 0x03", __func__);
 			return -EIO;
 	}
-	msleep(100);
+	msleep(200);
 
 	j = 0;
 
@@ -1388,7 +1389,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
         }
 		memcpy(fw_buf[3]+j, &data2[0], packet_size - 1);
 		
-		msleep(10);
+		msleep(WAIT_TIME_MS);
 		j = j + 129;
 		//printk("ce147_update_fw: i2c_read for 0xfb, count: %d\n", l);		
 	}
@@ -1688,6 +1689,7 @@ static int ce147_set_dzoom(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 		//To Do: This code needs to use ce147_waitfordone_timeout() API
 		for(count = 0; count < 300; count++)
 		{
+			msleep(WAIT_TIME_MS); //SG delay
 			err = ce147_i2c_read_multi(client, CMD_GET_DZOOM_LEVEL, NULL, 0, ce147_buf_get_dzoom_status, ce147_len_get_dzoom_status);
 			if(err < 0){
 				dev_err(&client->dev, "%s: failed: i2c_read for set_dzoom\n", __func__);
@@ -5273,7 +5275,7 @@ static const struct v4l2_subdev_core_ops ce147_core_ops = {
 	.querymenu = ce147_querymenu,
 	.g_ctrl = ce147_g_ctrl,
 	.s_ctrl = ce147_s_ctrl,
-	.s_ext_ctrls = ce147_s_ext_ctrls //SG Fix pointer type
+	.s_ext_ctrls = ce147_s_ext_ctrls
 };
 
 static const struct v4l2_subdev_video_ops ce147_video_ops = {

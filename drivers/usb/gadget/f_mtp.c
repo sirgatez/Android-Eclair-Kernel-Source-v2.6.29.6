@@ -100,10 +100,10 @@ static const char longname[] = 	"Gadget_MTP";
 static const char shortname[] = DRIVER_NAME;
 static const char enable_shortname[] = "usb_mtp_enable";//Vova: name for MTP enable device
 static int mtp_pid=-1; 
-//typedef enum {
-//mtp_disable_desc,
-//mtp_enable_desc
-//};
+typedef enum {
+mtp_disable_desc,
+mtp_enable_desc
+};
 
 /* MTP Device Structure*/
 struct mtpg_dev {

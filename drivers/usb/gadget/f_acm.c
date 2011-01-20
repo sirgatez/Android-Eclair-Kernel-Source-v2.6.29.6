@@ -109,7 +109,7 @@ static inline struct f_acm *port_to_acm(struct gserial *p)
 
 /* interface and class descriptors: */
 
-static struct usb_interface_descriptor acm_control_interface_desc __initdata = {
+static struct usb_interface_descriptor acm_control_interface_desc = {
 	.bLength =		USB_DT_INTERFACE_SIZE,
 	.bDescriptorType =	USB_DT_INTERFACE,
 	/* .bInterfaceNumber = DYNAMIC */
@@ -120,7 +120,7 @@ static struct usb_interface_descriptor acm_control_interface_desc __initdata = {
 	/* .iInterface = DYNAMIC */
 };
 
-static struct usb_interface_descriptor acm_data_interface_desc __initdata = {
+static struct usb_interface_descriptor acm_data_interface_desc = {
 	.bLength =		USB_DT_INTERFACE_SIZE,
 	.bDescriptorType =	USB_DT_INTERFACE,
 	/* .bInterfaceNumber = DYNAMIC */
@@ -131,7 +131,7 @@ static struct usb_interface_descriptor acm_data_interface_desc __initdata = {
 	/* .iInterface = DYNAMIC */
 };
 
-static struct usb_cdc_header_desc acm_header_desc __initdata = {
+static struct usb_cdc_header_desc acm_header_desc = {
 	.bLength =		sizeof(acm_header_desc),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_HEADER_TYPE,
@@ -139,7 +139,7 @@ static struct usb_cdc_header_desc acm_header_desc __initdata = {
 };
 
 static struct usb_cdc_call_mgmt_descriptor
-acm_call_mgmt_descriptor __initdata = {
+acm_call_mgmt_descriptor = {
 	.bLength =		sizeof(acm_call_mgmt_descriptor),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_CALL_MANAGEMENT_TYPE,
@@ -147,14 +147,14 @@ acm_call_mgmt_descriptor __initdata = {
 	/* .bDataInterface = DYNAMIC */
 };
 
-static struct usb_cdc_acm_descriptor acm_descriptor __initdata = {
+static struct usb_cdc_acm_descriptor acm_descriptor = {
 	.bLength =		sizeof(acm_descriptor),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_ACM_TYPE,
 	.bmCapabilities =	USB_CDC_CAP_LINE,
 };
 
-static struct usb_cdc_union_desc acm_union_desc __initdata = {
+static struct usb_cdc_union_desc acm_union_desc = {
 	.bLength =		sizeof(acm_union_desc),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_UNION_TYPE,
@@ -164,7 +164,7 @@ static struct usb_cdc_union_desc acm_union_desc __initdata = {
 
 /* full speed support: */
 
-static struct usb_endpoint_descriptor acm_fs_notify_desc __initdata = {
+static struct usb_endpoint_descriptor acm_fs_notify_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 	.bEndpointAddress =	USB_DIR_IN,
@@ -173,21 +173,21 @@ static struct usb_endpoint_descriptor acm_fs_notify_desc __initdata = {
 	.bInterval =		1 << GS_LOG2_NOTIFY_INTERVAL,
 };
 
-static struct usb_endpoint_descriptor acm_fs_in_desc __initdata = {
+static struct usb_endpoint_descriptor acm_fs_in_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 	.bEndpointAddress =	USB_DIR_IN,
 	.bmAttributes =		USB_ENDPOINT_XFER_BULK,
 };
 
-static struct usb_endpoint_descriptor acm_fs_out_desc __initdata = {
+static struct usb_endpoint_descriptor acm_fs_out_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 	.bEndpointAddress =	USB_DIR_OUT,
 	.bmAttributes =		USB_ENDPOINT_XFER_BULK,
 };
 
-static struct usb_descriptor_header *acm_fs_function[] __initdata = {
+static struct usb_descriptor_header *acm_fs_function[] = {
 	(struct usb_descriptor_header *) &acm_control_interface_desc,
 	(struct usb_descriptor_header *) &acm_header_desc,
 	(struct usb_descriptor_header *) &acm_call_mgmt_descriptor,
@@ -207,7 +207,7 @@ static struct usb_descriptor_header *null_acm_descs[] = {
 
 /* high speed support: */
 
-static struct usb_endpoint_descriptor acm_hs_notify_desc __initdata = {
+static struct usb_endpoint_descriptor acm_hs_notify_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 	.bEndpointAddress =	USB_DIR_IN,
@@ -216,21 +216,21 @@ static struct usb_endpoint_descriptor acm_hs_notify_desc __initdata = {
 	.bInterval =		GS_LOG2_NOTIFY_INTERVAL+4,
 };
 
-static struct usb_endpoint_descriptor acm_hs_in_desc __initdata = {
+static struct usb_endpoint_descriptor acm_hs_in_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 	.bmAttributes =		USB_ENDPOINT_XFER_BULK,
 	.wMaxPacketSize =	__constant_cpu_to_le16(512),
 };
 
-static struct usb_endpoint_descriptor acm_hs_out_desc __initdata = {
+static struct usb_endpoint_descriptor acm_hs_out_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 	.bmAttributes =		USB_ENDPOINT_XFER_BULK,
 	.wMaxPacketSize =	__constant_cpu_to_le16(512),
 };
 
-static struct usb_descriptor_header *acm_hs_function[] __initdata = {
+static struct usb_descriptor_header *acm_hs_function[] = {
 	(struct usb_descriptor_header *) &acm_control_interface_desc,
 	(struct usb_descriptor_header *) &acm_header_desc,
 	(struct usb_descriptor_header *) &acm_call_mgmt_descriptor,
@@ -847,7 +847,7 @@ int __init acm_function_add(struct usb_configuration *c)
 	return ret;
 }
 
-int __ref acm_function_config_changed(struct usb_composite_dev *cdev,
+int acm_function_config_changed(struct usb_composite_dev *cdev,
 	struct usb_configuration *c)
 {
 	struct f_acm	*acm = _f_acm;

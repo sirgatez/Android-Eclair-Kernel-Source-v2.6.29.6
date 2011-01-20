@@ -91,6 +91,18 @@ static const u32 s5p_sys_clk_div0_tab_1GHZ[][DIV_TAB_MAX_FIELD] = {
         {7, 7, 0, 0, 7, 0, 9, 0, 3, 3, 1, 7}, /* APLL=0.800GHz, MPLL=667MHz, ARMCLK=0.100GHz, SCLKA2M=100MHz, HCLK_MSYS=100MHz */
 };
 
+#if 0
+// Old non-overclock
+static const u32 s5p_sys_clk_div0_tab_1GHZ[][DIV_TAB_MAX_FIELD] = {
+        {0, 4, 4, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {0, 3, 3, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {1, 3, 1, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {3, 3, 0, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {7, 7, 0, 0, 7, 0, 9, 0, 3, 3, 1, 7},
+};
+
+#endif
+
 /*pms value table*/
 /*APLL(m, p, s), MPLL(m, p, s)*/
 static const u32 s5p_sys_clk_mps_tab_1GHZ[][6] = {

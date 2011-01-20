@@ -167,7 +167,6 @@ extern int get_tool_launcher_setting(void);
 extern int get_user_usb_mode_setting(void);
 extern int usb_switch_usb_mode_tool_launcher(int mode);
 #endif
-#if 0
 static struct {
 	char		*file[MAX_LUNS];
 	int		ro[MAX_LUNS];
@@ -203,7 +202,7 @@ static struct {
 	.release		= 0xffff,	// Use controller chip type
 	.buflen			= 16384,
 	};
-#endif
+
 
 
 
@@ -2040,10 +2039,9 @@ static int check_command(struct fsg_dev *fsg, int cmnd_size,
 	/* Verify the length of the command itself */
 	if (cmnd_size != fsg->cmnd_size) {
 
-		/* Special case workaround: MS-Windows issues REQUEST_SENSE
-		 * and INQUIRY commands with cbw->Length == 12 (it should be 6). */
-		if ((fsg->cmnd[0] == SC_REQUEST_SENSE && fsg->cmnd_size == 12)
-		 || (fsg->cmnd[0] == SC_INQUIRY && fsg->cmnd_size == 12))
+		/* Special case workaround: MS-Windows issues REQUEST SENSE
+		 * with cbw->Length == 12 (it should be 6). */
+		if (fsg->cmnd[0] == SC_REQUEST_SENSE && fsg->cmnd_size == 12)
 			cmnd_size = fsg->cmnd_size;
 		else {
 			fsg->phase_error = 1;

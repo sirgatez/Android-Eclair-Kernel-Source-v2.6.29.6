@@ -113,7 +113,7 @@ static int fimc_s_ctrl(struct file *filp, void *fh, struct v4l2_control *c)
 
 static int fimc_s_ext_ctrls(struct file *filp, void *fh, struct v4l2_ext_controls *c)
 {
-	//struct fimc_control *ctrl = (struct fimc_control *) fh;
+	struct fimc_control *ctrl = (struct fimc_control *) fh;
 	int ret = -1;
 	ret = fimc_s_ext_ctrls_capture(fh, c->controls);
 	//ret = fimc_s_ext_ctrls_capture(fh, c); //SG Fix Camera

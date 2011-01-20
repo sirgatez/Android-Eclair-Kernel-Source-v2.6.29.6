@@ -73,7 +73,7 @@ typedef struct {
 } status_t;
 
 /* REBOOT_MODE */
-#define REBOOT_MODE_NONE		0
+#define REBOOT_MODE_NONE			0
 #define REBOOT_MODE_DOWNLOAD		1
 #define REBOOT_MODE_CHARGING		3
 #define REBOOT_MODE_RECOVERY		4

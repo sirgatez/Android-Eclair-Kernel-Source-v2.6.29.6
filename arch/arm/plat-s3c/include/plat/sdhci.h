@@ -41,10 +41,7 @@ struct s3c_sdhci_platdata {
 	char		**clocks;	/* set of clock sources */
 
 	void	(*cfg_gpio)(struct platform_device *dev, int width);
-	void	(*cfg_card)(struct platform_device *dev,
-				void __iomem *regbase,
-				struct mmc_ios *ios,
-				struct mmc_card *card);
+	void	(*cfg_card)(struct platform_device *dev, void __iomem *regbase, struct mmc_ios *ios, struct mmc_card *card);
 	void	(*adjust_cfg_card)(struct s3c_sdhci_platdata *pdata, void __iomem *regbase, int rw);
 	int		rx_cfg;
 	int		tx_cfg;

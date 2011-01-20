@@ -814,8 +814,7 @@ int usb_create_sysfs_intf_files(struct usb_interface *intf)
 	if (intf->sysfs_files_created || intf->unregistering)
 		return 0;
 
-	if (alt->string == NULL &&
-			!(udev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))
+	if (alt->string == NULL && !(udev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))
 		alt->string = usb_cache_string(udev, alt->desc.iInterface);
 	if (alt->string)
 		retval = device_create_file(&intf->dev, &dev_attr_interface);

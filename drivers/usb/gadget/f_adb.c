@@ -152,7 +152,6 @@ static struct usb_descriptor_header *null_adb_descs[] = {
 	NULL,
 };
 
-
 /* temporary variable used between adb_open() and adb_gadget_bind() */
 static struct adb_dev *_adb_dev;
 
@@ -255,7 +254,7 @@ static void adb_complete_out(struct usb_ep *ep, struct usb_request *req)
 	wake_up(&dev->read_wq);
 }
 
-static int __init create_bulk_endpoints(struct adb_dev *dev,
+static int create_bulk_endpoints(struct adb_dev *dev,
 				struct usb_endpoint_descriptor *in_desc,
 				struct usb_endpoint_descriptor *out_desc)
 {

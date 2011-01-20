@@ -140,7 +140,6 @@ static int s3c_need_zlp = 0;
 #define pr_vdebug(fmt, arg...) \
 	({ if (0) pr_debug(fmt, ##arg); })
 #endif
-
 /*-------------------------------------------------------------------------*/
 
 /* Circular Buffer */
@@ -842,6 +841,38 @@ static int gs_writes_finished(struct gs_port *p)
 	return cond;
 }
 
+static int gs_chars_in_buffer(struct tty_struct *tty)
+{
+	struct gs_port	*port = tty->driver_data;
+	unsigned long	flags;
+	int		chars = 0;
+
+	spin_lock_irqsave(&port->port_lock, flags);
+	chars = gs_buf_data_avail(&port->port_write_buf);
+	spin_unlock_irqrestore(&port->port_lock, flags);
+
+//	printk("[%s] gs_chars_in_buffer: (%d,%p) chars=%d\n", __func__, 
+//		port->port_num, tty, chars);
+
+#if ACM_ZLP
+	if (chars == 0 && s3c_multiple == 1) {
+
+		if (port->port_usb) {
+			int status;
+			//printk("%s: Need zlp.....\n", __func__);
+			s3c_need_zlp = 1;
+
+			spin_lock_irqsave(&port->port_lock, flags);
+			status = gs_start_tx(port);
+			spin_unlock_irqrestore(&port->port_lock, flags);
+		}
+	}
+#endif
+
+	return chars;
+}
+
+
 static void gs_close(struct tty_struct *tty, struct file *file)
 {
 	struct gs_port *port = tty->driver_data;
@@ -850,7 +881,7 @@ static void gs_close(struct tty_struct *tty, struct file *file)
 #if ACM_ZLP
 	//int ret = gs_chars_in_buffer(tty);
 //	printk("[%s] gs_chars_in_buffer: %d\n", __func__, ret);
-//	gs_chars_in_buffer(tty);
+	gs_chars_in_buffer(tty);
 
 #endif
 
@@ -988,37 +1019,6 @@ static int gs_write_room(struct tty_struct *tty)
 		port->port_num, tty, room);
 
 	return room;
-}
-
-static int gs_chars_in_buffer(struct tty_struct *tty)
-{
-	struct gs_port	*port = tty->driver_data;
-	unsigned long	flags;
-	int		chars = 0;
-
-	spin_lock_irqsave(&port->port_lock, flags);
-	chars = gs_buf_data_avail(&port->port_write_buf);
-	spin_unlock_irqrestore(&port->port_lock, flags);
-
-//	printk("[%s] gs_chars_in_buffer: (%d,%p) chars=%d\n", __func__, 
-//		port->port_num, tty, chars);
-
-#if ACM_ZLP
-	if (chars == 0 && s3c_multiple == 1) {
-
-		if (port->port_usb) {
-			int status;
-			//printk("%s: Need zlp.....\n", __func__);
-			s3c_need_zlp = 1;
-
-			spin_lock_irqsave(&port->port_lock, flags);
-			status = gs_start_tx(port);
-			spin_unlock_irqrestore(&port->port_lock, flags);
-		}
-	}
-#endif
-
-	return chars;
 }
 
 /* undo side effects of setting TTY_THROTTLED */

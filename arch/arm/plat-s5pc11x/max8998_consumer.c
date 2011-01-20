@@ -78,13 +78,13 @@ enum PMIC_VOLTAGE {
 static const unsigned int frequency_match_1GHZ[][2] = {
 /* frequency, Mathced VDD ARM voltage , Matched VDD INT*/
 #if 1
-        {1275, 1100}, /* 1.2GHz */
-        {1250, 1100}, /* 1.0GHz */
-        {1150, 1100}, /* 0.8GHz */
-        {1050, 1100}, /* 0.6GHz */
-        {1000, 1100}, /* 0.4GHz */
-        { 900, 1100}, /* 0.2GHz */
-        { 900, 1000}, /* 0.1GHz */
+        {1275, 1100},	/* 1.2GHz 1275UV/1325NV */
+        {1250, 1100},	/* 1.0GHz 1250UV/1300NV */
+        {1150, 1100},	/* 0.8GHz 1150UV/1200NV */
+        {1050, 1100},	/* 0.6GHz 1050UV/1100NV */
+        {1000, 1100},	/* 0.4GHz 1000UV/1050NV */
+        { 900, 1100},	/* 0.2GHz  900UV/ 950NV */
+        { 900, 1000},	/* 0.1GHz  900UV/ 950NV */
 #else //just for dvs test
         {1000000, 1250, 1100, 0},
         {800000, 1250, 1100, 1},
@@ -96,10 +96,10 @@ static const unsigned int frequency_match_1GHZ[][2] = {
 
 static const unsigned int frequency_match_800MHZ[][2] = {
 /* frequency, Mathced VDD ARM voltage , Matched VDD INT*/
-        {1150, 1100},
-        {1000, 1100},
-        {900, 1100},
-        {900, 1000},
+        {1150, 1100},	/* 0.8GHz 	1150UV/1200NV */
+        {1000, 1100},	/* 0.4GHz 	1000UV/1050NV */
+        { 900, 1100},	/* 0.2GHz 	 900UV/ 950NV */
+        { 900, 1000},	/* 0.1GHz 	 900UV/ 950NV */
 };
 const unsigned int (*frequency_match[2])[2] = {
         frequency_match_1GHZ,
@@ -154,10 +154,10 @@ const unsigned int (*dvs_volt_table[2])[3] = {
 };
 
 static const unsigned int dvs_arm_voltage_set[][2] = {
-	{DVSARM1, 1275},
-	{DVSARM2, 1200},
-	{DVSARM3, 1050},
-	{DVSARM4, 950},
+	{DVSARM1, 1275},	/* 1.0GHz	1250UV/1300NV */
+	{DVSARM2, 1200},	/* 0.8GHz 	1150UV/1200NV */
+	{DVSARM3, 1050},	/* 0.6GHz 	1050UV/1100NV */
+	{DVSARM4, 950},		/* 0.2-1GHz  900UV/ 950NV */
 	{DVSINT1, 1100},
 	{DVSINT2, 1000},
 };

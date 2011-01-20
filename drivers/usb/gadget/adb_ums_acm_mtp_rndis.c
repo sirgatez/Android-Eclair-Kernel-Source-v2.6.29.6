@@ -204,7 +204,7 @@ void android_usb_set_connected(int connected)
 static void enable_adb(struct android_dev *dev, int enable);
 #endif
 
-static int __ref android_bind_config(struct usb_configuration *c)
+static int __init android_bind_config(struct usb_configuration *c)
 {
 	struct android_dev *dev = _android_dev;
 	int ret;
@@ -391,7 +391,7 @@ static int acm_only_bind_config(struct usb_configuration *c)
 #endif
 
 
-static struct __init usb_configuration android_config  = {
+static struct usb_configuration android_config  = {
 	.label		= ANDROID_NO_DEBUG_UMS_CONFIG_STRING,
 	.bind		= android_bind_config,
 	.bConfigurationValue = 1,

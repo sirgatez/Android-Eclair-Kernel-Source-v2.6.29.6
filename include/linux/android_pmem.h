@@ -51,7 +51,6 @@ int get_pmem_user_addr(struct file *file, unsigned long *start,
 		       unsigned long *end);
 void put_pmem_file(struct file* file);
 void flush_pmem_file(struct file *file, unsigned long start, unsigned long len);
-#define PMEM_CACHE_FLUSH	_IOW(PMEM_IOCTL_MAGIC, 8, unsigned int)
 
 struct android_pmem_platform_data
 {

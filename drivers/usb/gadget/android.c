@@ -126,7 +126,7 @@ void android_usb_set_connected(int connected)
 
 
 
-static int __ref android_bind_config(struct usb_configuration *c)
+static int __init android_bind_config(struct usb_configuration *c)
 {
 	struct android_dev *dev = _android_dev;
 	int ret;

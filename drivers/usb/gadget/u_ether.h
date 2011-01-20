@@ -116,14 +116,14 @@ void geth_function_enable(int enable);
 
 #ifdef CONFIG_USB_ETH_RNDIS
 
-inline int __init rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
+inline int rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 {
 	return 0;
 }
 
 #else
 
-inline int __init rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN]);
+inline int rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN]);
 
 #endif
 

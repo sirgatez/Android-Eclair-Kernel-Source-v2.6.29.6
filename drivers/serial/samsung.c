@@ -415,10 +415,6 @@ static int s3c24xx_serial_rx_fifocnt(struct s3c24xx_uart_port *ourport,
 	return (ufstat & info->rx_fifomask) >> info->rx_fifoshift;
 }
 
-
-/* ? - where has parity gone?? */
-#define S3C2410_UERSTAT_PARITY (0x1000)
-
 static irqreturn_t
 s3c24xx_serial_rx_chars(int irq, void *dev_id)
 {

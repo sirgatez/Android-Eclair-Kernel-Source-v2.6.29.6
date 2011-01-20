@@ -147,7 +147,7 @@ static const struct usb_descriptor_header *otg_desc[] = {
 	NULL,
 };
 
-static int __ref android_bind_config(struct usb_configuration *c)
+static int __init android_bind_config(struct usb_configuration *c)
 {
 	struct android_dev *dev = _android_dev;
 	int ret;
@@ -188,7 +188,7 @@ static int __ref android_bind_config(struct usb_configuration *c)
 #define	ANDROID_DEBUG_CONFIG_STRING "ACM + UMS + ADB (Debugging mode)"
 #define	ANDROID_NO_DEBUG_CONFIG_STRING "UMS Only (Not debugging mode)"
 
-static struct __init usb_configuration android_config  = {
+static struct usb_configuration android_config  = {
 	.label		= ANDROID_NO_DEBUG_CONFIG_STRING,
 	.bind		= android_bind_config,
 	.bConfigurationValue = 1,
