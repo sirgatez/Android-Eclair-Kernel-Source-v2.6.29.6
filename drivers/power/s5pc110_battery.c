@@ -145,11 +145,11 @@ static unsigned int start_time_msec;
 static unsigned int total_time_msec;
 
 static char *status_text[] = {
-	[POWER_SUPPLY_STATUS_UNKNOWN] =		"Unknown",
-	[POWER_SUPPLY_STATUS_CHARGING] =	"Charging",
-	[POWER_SUPPLY_STATUS_DISCHARGING] =	"Discharging",
+	[POWER_SUPPLY_STATUS_UNKNOWN] =			"Unknown",
+	[POWER_SUPPLY_STATUS_CHARGING] =		"Charging",
+	[POWER_SUPPLY_STATUS_DISCHARGING] =		"Discharging",
 	[POWER_SUPPLY_STATUS_NOT_CHARGING] =	"Not Charging",
-	[POWER_SUPPLY_STATUS_FULL] =		"Full",
+	[POWER_SUPPLY_STATUS_FULL] =			"Full",
 };
 
 typedef enum {

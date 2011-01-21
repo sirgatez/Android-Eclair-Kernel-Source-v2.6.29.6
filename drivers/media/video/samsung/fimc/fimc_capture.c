@@ -739,7 +739,6 @@ int fimc_try_fmt_vid_capture(struct file *file, void *fh, struct v4l2_format *f)
 
 static int fimc_alloc_buffers(struct fimc_control *ctrl, int size[], int align)
 {
-//SG
 	struct fimc_capinfo *cap = ctrl->cap;
 	int i, plane;
 
@@ -750,8 +749,7 @@ static int fimc_alloc_buffers(struct fimc_control *ctrl, int size[], int align)
 			cap->bufs[i].length[plane] = size[plane];
 			if(!cap->bufs[i].length[plane])
 				continue;
-//SG	
-	dev_err(ctrl->dev, "%s: CHECKPOINT1 PREALLOC MEMORY\n",__func__);
+
 			fimc_dma_alloc(ctrl, &cap->bufs[i], plane, align);
 
 			if (!cap->bufs[i].base[plane])
@@ -761,7 +759,6 @@ static int fimc_alloc_buffers(struct fimc_control *ctrl, int size[], int align)
 		cap->bufs[i].state = VIDEOBUF_PREPARED;
 		cap->bufs[i].id = i;
 	}
-	dev_err(ctrl->dev, "%s: CHECKPOINT2 PREALLOC MEMORY\n",__func__);
 
 	return 0;
 
@@ -772,7 +769,6 @@ err_alloc:
 
 		memset(&cap->bufs[i], 0, sizeof(cap->bufs[i]));
 	}
-	dev_err(ctrl->dev, "%s: CHECKPOINT3 PREALLOC MEMORY\n",__func__);
 
 	return -ENOMEM;
 }
@@ -891,7 +887,7 @@ int fimc_reqbufs_capture(void *fh, struct v4l2_requestbuffers *b)
 	default:
 		break;
 	}
-//SG
+
 	ret = fimc_alloc_buffers(ctrl, size, align);
 	if (ret) {
 		dev_err(ctrl->dev, "%s: no memory for "
@@ -1070,15 +1066,11 @@ int fimc_s_ext_ctrls_capture(void *fh, struct v4l2_ext_control *c)
 {
 	struct fimc_control *ctrl = fh;
 	int ret = 0;
-	//SG Camera Crash
-	//Reboot phone on photo snap? SG
 	mutex_lock(&ctrl->v4l2_lock);
 	
 	/* try on subdev */
-//dev_err(ctrl->dev, "%s: DEBUGA.\n", __func__);
 	ret = subdev_call(ctrl, core, s_ext_ctrls, c);
 	//ret = subdev_call(ctrl, core, s_ext_ctrls, c->controls);
-//dev_err(ctrl->dev, "%s: DEBUGB.\n", __func__);
 
 	mutex_unlock(&ctrl->v4l2_lock);
 

@@ -206,7 +206,7 @@ __dma_alloc(struct device *dev, size_t size, dma_addr_t *handle, gfp_t gfp,
 	 */
 	{
 		void *ptr = page_address(page);
-		memset(ptr, 0, size); //SG Uncomment?
+		memset(ptr, 0, size);
 		dmac_flush_range(ptr, ptr + size);
 		outer_flush_range(__pa(ptr), __pa(ptr) + size);
 	}

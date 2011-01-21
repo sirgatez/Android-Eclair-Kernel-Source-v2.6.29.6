@@ -829,7 +829,6 @@ static int ce147_read_fw_bin(const char *path, char *fwBin, int *fwSize)
 
 	filep = filp_open(path, O_RDONLY, 0) ;
 
-	//if (filep && (filep!= 0xfffffffe))
 	if (filep)
 	{
 		old_fs = get_fs();
@@ -3251,7 +3250,6 @@ static int ce147_set_object_tracking(struct v4l2_subdev *sd, struct v4l2_control
 		/* OT status: an object is detected successfully */
 		else if(ce147_buf_check_object_tracking[0] == 0x02)
 		{
-			dev_err(&client->dev, "AMITHEBUG: %s: failed: ce147_start_continous_af for object_tracking\n", __func__);
 			ctrl->value = CAF_START;
 			err = ce147_set_continous_af(sd, ctrl);
 			if(err < 0){
@@ -3269,7 +3267,6 @@ static int ce147_set_object_tracking(struct v4l2_subdev *sd, struct v4l2_control
 	}
 	else
 	{
-		dev_err(&client->dev, "AMITHEBUG: %s: failed: ce147_start_continous_af for cel14_bug_stop_lens\n", __func__);
 		err = ce147_get_focus_mode(client, CMD_STOP_LENS_MOVEMENT, ce147_buf_stop_lens);
 		if(err < 0){
 			dev_err(&client->dev, "%s: failed: ce147_start_continous_af for object_tracking\n", __func__);
@@ -5189,7 +5186,6 @@ static int ce147_s_ext_ctrls(struct v4l2_subdev *sd, struct v4l2_ext_control *ct
 	int err = -ENOIOCTLCMD;
 	long temp = 0;
 	struct gps_info_common * tempGPSType = NULL;
-	//SG Revisit Crash
 
 	switch (ctrl->id) {
 
@@ -5237,22 +5233,11 @@ static int ce147_s_ext_ctrls(struct v4l2_subdev *sd, struct v4l2_ext_control *ct
 		state->exifTimeInfo =(struct tm *)ctrl->reserved;
 		err = 0;
 		break;
-//	case 10092544:
-//		dev_err(&client->dev, "%s: NEW vidioc_s_ext_ctrls failed/SAVED %d, s_ctrl: id(%d), value(%d)\n", __func__, err, (ctrl->id), ctrl->value);
-//		//err = 0;
-//		break;
 	}
 
 	if (err < 0)
 		dev_err(&client->dev, "%s: vidioc_s_ext_ctrl failed %d\n", __func__, err);
 
-
-//	if (err < 0) {
-//		dev_err(&client->dev, "%s: OLD vidioc_s_ext_ctrls failed %d\n", __func__, err);
-//		dev_err(&client->dev, "%s: NEW vidioc_s_ext_ctrls failed %d, s_ctrl: id(%d), value(%d)\n", __func__, err, (ctrl->id), ctrl->value);
-//		dev_err(&client->dev, "%s: NEW vidioc_s_ext_ctrls failed %d, s_ctrl: CLASS_BASE_id(%d), value(%d)\n", __func__, err, (ctrl->id - V4L2_CID_CAMERA_CLASS_BASE), ctrl->value);
-//		dev_err(&client->dev, "%s: NEW vidioc_s_ext_ctrls failed %d, s_ctrl: PRIVATE_BASE_id(%d), value(%d)\n", __func__, err, (ctrl->id - V4L2_CID_PRIVATE_BASE), ctrl->value);
-//	}
 	return err;
 }
 

@@ -1292,32 +1292,11 @@ static long __video_do_ioctl(struct file *file,
 		struct v4l2_ext_controls *p = arg;
 
 		p->error_idx = p->count;
-//SG
-//			printk(KERN_CONT "DEBUGME1:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->controls[0].id, p->controls[0].value, ret);
-//			printk(KERN_CONT "DEBUGME1:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->id, p->value, ret);
 		if (!ops->vidioc_s_ext_ctrls)
 			break;
-//		printk(KERN_CONT "DEBUGME2:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->controls[0].id, p->controls[0].value, ret);
-//			printk(KERN_CONT "DEBUGME2:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->id, p->value, ret);
 		v4l_print_ext_ctrls(cmd, vfd, p, 1);
 		if (check_ext_ctrls(p, 0))
 			ret = ops->vidioc_s_ext_ctrls(file, fh, p);
-
-//		ctrls.ctrl_class = V4L2_CTRL_ID2CLASS(p->id);
-//		ctrls.count = 1;
-//		ctrls.controls = &ctrl;
-//		ctrl.id = p->id;
-//		ctrl.value = p->value;
-//		if (check_ext_ctrls(&ctrls, 1))
-//			ret = ops->vidioc_s_ext_ctrls(file, fh, &ctrls);
-//		break;
-
-
-//		if (check_ext_ctrls(p, 0))
-//			printk(KERN_CONT "DEBUGME3:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->controls[0].id, p->controls[0].value, ret);
-//			printk(KERN_CONT "DEBUGME3:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->id, p->value, ret);
-//			printk(KERN_CONT "DEBUGME3:%d: id/val=0x%x/0x%x RET:%l",	cmd, p->controls[0].id, p->controls[0].value, ret);
-
 		break;
 	}
 	case VIDIOC_TRY_EXT_CTRLS:
