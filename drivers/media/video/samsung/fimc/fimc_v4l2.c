@@ -45,7 +45,7 @@ static int fimc_reqbufs(struct file *filp, void *fh,
 {
 	struct fimc_control *ctrl = (struct fimc_control *) fh;
 	int ret = -1;
-
+//SG
 	if (b->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
 		ret = fimc_reqbufs_capture(fh, b);
 	} else if (b->type == V4L2_BUF_TYPE_VIDEO_OUTPUT) {

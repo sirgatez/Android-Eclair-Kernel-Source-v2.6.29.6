@@ -36,20 +36,20 @@
 #define FIMC_DEVICES		3
 #define FIMC_SUBDEVS		3
 #define FIMC_MAXCAMS		4
-#define FIMC_PHYBUFS		4
-#define FIMC_CAPBUFS		16//(FIMC_PHYBUFS + 1)
+#define FIMC_PHYBUFS		4  //4
+#define FIMC_CAPBUFS		16 //16/(FIMC_PHYBUFS + 1)
 #define FIMC_OUTBUFS		3
 #define FIMC_INQ_BUFS		3
 #define FIMC_OUTQ_BUFS		3
-#define FIMC_TPID		3
+#define FIMC_TPID			3
 
 #define FIMC_ONESHOT_TIMEOUT	200
-#define FIMC_DQUEUE_TIMEOUT	200
+#define FIMC_DQUEUE_TIMEOUT		200
 
 #define FORMAT_FLAGS_PACKED	0x1
 #define FORMAT_FLAGS_PLANAR	0x2
 
-#define	FIMC_ADDR_Y		0
+#define	FIMC_ADDR_Y			0
 #define	FIMC_ADDR_CB		1
 #define	FIMC_ADDR_CR		2
 

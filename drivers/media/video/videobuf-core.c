@@ -498,7 +498,6 @@ int videobuf_qbuf(struct videobuf_queue *q,
 		dprintk(1, "qbuf: Wrong type.\n");
 		goto done;
 	}
-	//if (b->index < 0 || b->index >= VIDEO_MAX_FRAME) {
 	if (b->index >= VIDEO_MAX_FRAME) {
 		dprintk(1, "qbuf: index out of range.\n");
 		goto done;

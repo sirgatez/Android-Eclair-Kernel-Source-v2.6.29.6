@@ -54,10 +54,12 @@
 #endif
 
 /* Default resolution & pixelformat. plz ref ce147_platform.h */
-#define DEFAULT_PIX_FMT		V4L2_PIX_FMT_UYVY	/* YUV422 */
-#define DEFUALT_MCLK		24000000
-#define POLL_TIME_MS		10
-#define WAIT_TIME_MS		10
+#define DEFAULT_PIX_FMT			V4L2_PIX_FMT_UYVY	/* YUV422 */
+#define DEFUALT_MCLK			24000000
+#define CRITICAL_POLL_TIME_MS	5
+#define LOOP_POLL_TIME_MS		10
+#define POLL_TIME_MS			20
+#define WAIT_TIME_MS			20
 
 /* Camera ISP command */
 #define CMD_VERSION						0x00
@@ -363,7 +365,7 @@ static inline struct ce147_state *to_state(struct v4l2_subdev *sd)
 static int ce147_i2c_write_multi(struct i2c_client *client, unsigned char cmd, 
 		unsigned char *w_data, unsigned int w_len)
 {
-	int retry_count = 1;
+	int retry_count = 2;
 	unsigned char buf[w_len+1];
 	struct i2c_msg msg = {client->addr, 0, w_len+1, buf};
 
@@ -371,6 +373,7 @@ static int ce147_i2c_write_multi(struct i2c_client *client, unsigned char cmd,
 
 	buf[0] = cmd;
 	memcpy(buf+1, w_data, w_len);
+	msleep(CRITICAL_POLL_TIME_MS);
 
 #ifdef CE147_DEBUG
 	{
@@ -411,10 +414,11 @@ static int ce147_i2c_read_multi(struct i2c_client *client, unsigned char cmd,
 	unsigned char buf[w_len+1];
 	struct i2c_msg msg = {client->addr, 0, w_len + 1, buf};
 	int ret = -1;
-	int retry_count = 1;
+	int retry_count = 2;
 
 	buf[0] = cmd;
 	memcpy(buf+1, w_data, w_len);
+	msleep(CRITICAL_POLL_TIME_MS);
 
 #ifdef CE147_DEBUG
 	{
@@ -668,7 +672,103 @@ static int ce147_waitfordone_timeout(struct i2c_client *client, unsigned char cm
 		msleep(polling_interval);
 	}
 
+	dev_err(&client->dev, "waitfordonetimeout: Status check returns %02x\n\n", cam_status);
+
 	if(cam_status != value)
+		return -EBUSY;
+	else
+		return jiffies_to_msecs(jiffies - jiffies_start);
+}
+
+static int ce147_waitfordone_timeout_wide(struct i2c_client *client, unsigned char cmd, unsigned char values[], int valuecheck[], unsigned int valuecount,
+					int timeout, int polling_interval)
+{
+	int err;
+	int i;
+	int match = 1;
+	unsigned char cam_status[valuecount];
+	unsigned long jiffies_start = jiffies;
+	unsigned long jiffies_timeout = jiffies_start + msecs_to_jiffies(timeout);
+
+	if(polling_interval < 0)
+		polling_interval = POLL_TIME_MS;
+
+	while(time_before(jiffies, jiffies_timeout)){
+		for(i = 0; i < valuecount; i++)
+		{
+			cam_status[i] = 0xFF;
+		}
+
+		err = ce147_i2c_read_multi(client, cmd, NULL, 0, cam_status, valuecount);
+		if(err < 0)
+			return -EIO;
+
+		match = 1;
+		for(i = 0; i < valuecount; i++)
+		{
+			if((cam_status[i] != values[i]) && (valuecheck[i] == 1))
+				match = 0;
+		}
+
+		if(match > 0) 
+			break;
+
+		msleep(polling_interval);
+	}
+
+	for(i = 0; i < valuecount; i++)
+	{
+		dev_err(&client->dev, "waitfordonetimeout_wide: Status check returns %02x\n\n", cam_status[i]);
+	}
+
+	if(match != 1)
+		return -EBUSY;
+	else
+		return jiffies_to_msecs(jiffies - jiffies_start);
+}
+
+static int ce147_waitfordone_timeout_multi(struct i2c_client *client, unsigned char cmd, unsigned char values[], unsigned int valuecount,
+					int timeout, int polling_interval)
+{
+	int err;
+	int i;
+	int match = 1;
+	unsigned char cam_status[valuecount];
+	unsigned long jiffies_start = jiffies;
+	unsigned long jiffies_timeout = jiffies_start + msecs_to_jiffies(timeout);
+
+	if(polling_interval < 0)
+		polling_interval = POLL_TIME_MS;
+
+	while(time_before(jiffies, jiffies_timeout)){
+		for(i = 0; i < valuecount; i++)
+		{
+			cam_status[i] = 0xFF;
+		}
+
+		err = ce147_i2c_read_multi(client, cmd, NULL, 0, cam_status, valuecount);
+		if(err < 0)
+			return -EIO;
+
+		match = 0;
+		for(i = 0; i < valuecount; i++)
+		{
+			if((cam_status[0] == values[i]))
+				match = 1;
+		}
+
+		if(match > 0) 
+			break;
+
+		msleep(polling_interval);
+	}
+
+	for(i = 0; i < valuecount; i++)
+	{
+		dev_err(&client->dev, "waitfordonetimeout_wide: Status check returns %02x\n\n", cam_status[i]);
+	}
+
+	if(match != 1)
 		return -EBUSY;
 	else
 		return jiffies_to_msecs(jiffies - jiffies_start);
@@ -1028,7 +1128,7 @@ static int ce147_update_fw(struct v4l2_subdev *sd)
 	int err;
 
 	const unsigned int packet_size = 129; //Data 128 + Checksum 1
-	unsigned int packet_num, k, j, l = 0;
+	unsigned int packet_num, k, j = 0, l = 0;
 	unsigned char res = 0x00;
 	unsigned char data[129];
 	unsigned char data2[129];
@@ -1255,7 +1355,7 @@ static int ce147_dump_fw(struct v4l2_subdev *sd)
 	int err;
 
 	const unsigned int packet_size = 129; //Data 128 + Checksum 1
-	unsigned int packet_num, k, j, l = 0;
+	unsigned int packet_num, k, j = 0, l = 0;
 	unsigned char res = 0x00;
 	unsigned char data[129];
 	unsigned char data2[130];
@@ -1673,11 +1773,10 @@ static int ce147_set_dzoom(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 {
 	struct ce147_state *state = to_state(sd);
 	int err;
-	int count;
-	struct i2c_client *client = v4l2_get_subdevdata(sd);
+	unsigned char chartocomp[2] = { 0x00, 0x00};
+	unsigned int chartocheck[2] = {    0,    1};
 
-	unsigned char ce147_buf_get_dzoom_status[2] = { 0x00, 0x00 };
-	unsigned int ce147_len_get_dzoom_status = 2;
+	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	
 	if(CE147_RUNMODE_RUNNING == state->runmode){
 		err = ce147_i2c_write_multi(client, CMD_SET_DZOOM, &ce147_buf_set_dzoom[ctrl->value], 1);
@@ -1686,16 +1785,10 @@ static int ce147_set_dzoom(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 			return -EIO;
 		}
 
-		//To Do: This code needs to use ce147_waitfordone_timeout() API
-		for(count = 0; count < 300; count++)
-		{
-			msleep(WAIT_TIME_MS); //SG delay
-			err = ce147_i2c_read_multi(client, CMD_GET_DZOOM_LEVEL, NULL, 0, ce147_buf_get_dzoom_status, ce147_len_get_dzoom_status);
-			if(err < 0){
-				dev_err(&client->dev, "%s: failed: i2c_read for set_dzoom\n", __func__);
-				return -EIO;
-			}
-			if(ce147_buf_get_dzoom_status[1] == 0x00) break;
+		err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS);
+		if(err < 0){
+			dev_err(&client->dev, "%s: Wait for set_dzoom failed\n", __func__ );
+			return err;
 		}
 	}
 
@@ -1715,9 +1808,9 @@ static int ce147_set_preview_start(struct v4l2_subdev *sd)
 	int ce147_reglen_preview = 1;
 	unsigned char ce147_regbuf_preview_start[1] = { 0x01 };
 
-	int count;
-	unsigned char ce147_buf_get_dzoom_status[2] = { 0x00, 0x00 };
-	unsigned int ce147_len_get_dzoom_status = 2;	
+	unsigned char chartocomp[2] = { 0x00, 0x00};
+	unsigned int chartocheck[2] = {    0,    1};
+
          
 	if( !state->pix.width || !state->pix.height || !state->fps){
 		return -EINVAL;
@@ -1763,14 +1856,10 @@ static int ce147_set_preview_start(struct v4l2_subdev *sd)
 				return -EIO;
 			}
 
-			for(count = 0; count < 300; count++)
-			{
-				err = ce147_i2c_read_multi(client, CMD_GET_DZOOM_LEVEL, NULL, 0, ce147_buf_get_dzoom_status, ce147_len_get_dzoom_status);
-				if(err < 0){
-					dev_err(&client->dev, "%s: failed: i2c_read for set_dzoom in preview_start\n", __func__);
-					return -EIO;
-				}
-				if(ce147_buf_get_dzoom_status[1] == 0x00) break;
+			err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS);
+			if(err < 0){
+				dev_err(&client->dev, "%s: Wait for set_dzoom in preview_start failed\n", __func__ );
+				return err;
 			}
 		}
 
@@ -2372,7 +2461,6 @@ static int ce147_set_capture_config(struct v4l2_subdev *sd, struct v4l2_control 
 {
 	int err;
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	struct ce147_state *state = to_state(sd);
 
 
 #ifdef FEATURE_AE_TARGETING        // sunggeun DG04 ATLAS
@@ -2446,6 +2534,7 @@ static int ce147_set_capture_start(struct v4l2_subdev *sd, struct v4l2_control *
 	 * Right after ce147_set_capture_config,
 	 * 3. Wait for capture to complete for ce147_set_capture_cmd() in ce147_set_capture_config()
 	 */
+	msleep(CRITICAL_POLL_TIME_MS);
 	err = ce147_waitfordone_timeout(client, 0x6C, 0x00, 3000, POLL_TIME_MS);
 	if(err < 0){
 		dev_err(&client->dev, "%s: failed: Wait for buffering_capture\n", __func__ );
@@ -2457,6 +2546,7 @@ static int ce147_set_capture_start(struct v4l2_subdev *sd, struct v4l2_control *
 		/*
 		 * 4. Set EXIF information
 		 */ 
+		msleep(CRITICAL_POLL_TIME_MS);
 		err = ce147_set_capture_exif(sd);
 		if(err < 0){
 			dev_err(&client->dev, "%s: failed: i2c_write for exif\n", __func__);
@@ -2465,6 +2555,7 @@ static int ce147_set_capture_start(struct v4l2_subdev *sd, struct v4l2_control *
 		/*
 		 * 6. Set JPEG Encoding parameters
 		 */
+		msleep(CRITICAL_POLL_TIME_MS);
 		err = ce147_set_jpeg_config(sd);
 		if(err < 0){
 			dev_err(&client->dev, "%s: Setting JPEG encoding parameters\n", __func__);
@@ -2473,6 +2564,7 @@ static int ce147_set_capture_start(struct v4l2_subdev *sd, struct v4l2_control *
 		/*
 		 * 7. Wait for encoding to complete
 		 */
+		msleep(CRITICAL_POLL_TIME_MS);
 		err = ce147_waitfordone_timeout(client, 0x6C, 0x00, 3000, POLL_TIME_MS);
 		if(err < 0){
 			dev_err(&client->dev, "%s: failed: Wait for jpeg_encoding\n", __func__ );
@@ -2483,6 +2575,7 @@ static int ce147_set_capture_start(struct v4l2_subdev *sd, struct v4l2_control *
 	/*
 	 * 8. Get JPEG Main Data
 	 */ 
+	msleep(CRITICAL_POLL_TIME_MS);
 	err = ce147_get_snapshot_data(sd);
 	if(err < 0){
 		dev_err(&client->dev, "%s: failed: get_snapshot_data\n", __func__);
@@ -2491,6 +2584,7 @@ static int ce147_set_capture_start(struct v4l2_subdev *sd, struct v4l2_control *
 	/*
 	 * 9. Wait for done 
 	 */
+	msleep(CRITICAL_POLL_TIME_MS);
 	err = ce147_waitfordone_timeout(client, 0x61, 0x00, 3000, POLL_TIME_MS);
 	if(err < 0){
 		dev_err(&client->dev, "%s: failed: Wait for data_transfer\n", __func__ );
@@ -2515,6 +2609,17 @@ static int ce147_get_focus_mode(struct i2c_client *client, unsigned char cmd, un
 		return -EIO;
 	}	
 	//check whether af data is valid or not
+#if 0
+//SG
+	unsigned char chartocomp[2] = { 0x00, 0x00};
+	unsigned int chartocheck[2] = {    0,    1};
+			err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS);
+			if(err < 0){
+				dev_err(&client->dev, "%s: Wait for set_dzoom in preview_start failed\n", __func__ );
+				return err;
+			}
+		}
+#endif
 	for(count = 0; count < 600; count++)
 	{
 		msleep(10);
@@ -2536,11 +2641,12 @@ static int ce147_get_focus_mode(struct i2c_client *client, unsigned char cmd, un
 static int ce147_set_af_softlanding(struct v4l2_subdev *sd)
 {
 	int err;
-	int count;
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct ce147_state *state = to_state(sd);
 
-	unsigned char ce147_buf_get_af_status[1] = { 0x00 };
+	unsigned char chartocomp[1] = { 0x08};
+	unsigned int chartocheck[1] = {    1};
+
 	unsigned char ce147_buf_set_af_land[1] = { 0x08 };
 	unsigned int ce147_len_set_af_land = 1;
 
@@ -2552,18 +2658,11 @@ static int ce147_set_af_softlanding(struct v4l2_subdev *sd)
 			dev_err(&client->dev, "%s: failed: i2c_write for auto_focus\n", __func__);
 			return -EIO;
 		}	
-		//check whether af data is valid or not
-		for(count = 0; count < 600; count++)
-		{
-			msleep(10);
-			ce147_buf_get_af_status[0] = 0xFF;
-			err = ce147_i2c_read_multi(client, CMD_CHECK_AUTO_FOCUS_SEARCH, NULL, 0, ce147_buf_get_af_status, 1);
+			err = ce147_waitfordone_timeout_wide(client, CMD_CHECK_AUTO_FOCUS_SEARCH, chartocomp, chartocheck , 1, 3000, LOOP_POLL_TIME_MS);
 			if(err < 0){
-				dev_err(&client->dev, "%s: failed: i2c_read for get_focus_mode\n", __func__);
-				return -EIO;
+				dev_err(&client->dev, "%s: Wait for get_focus_mode failed\n", __func__ );
+				return err;
 			}
-			if((ce147_buf_get_af_status[0]) == 0x08) break;
-		}
 	}
 	return 0;
 }
@@ -2623,7 +2722,7 @@ static int ce147_set_flash(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
             dev_err(&client->dev, "%s: failed: i2c_write for set_flash_power\n", __func__);
             return -EIO;
         }
-
+	msleep(CRITICAL_POLL_TIME_MS);
         //need to modify flash off for torch mode
         if(ctrl->value == FLASH_MODE_TORCH_ON ||ctrl->value == FLASH_MODE_TORCH_OFF)//SecFeature.SPRINT by aswoogi
         {
@@ -3105,17 +3204,17 @@ static int ce147_set_continous_af(struct v4l2_subdev *sd, struct v4l2_control *c
 static int ce147_set_object_tracking(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 {
 	int err;
-	int count;
 	unsigned short x;
 	unsigned short y;
 	
 	struct ce147_state *state = to_state(sd);
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 
+	unsigned char chartocomp[2] = { 0x03, 0x02};
+
 	unsigned char ce147_buf_set_object_tracking[7] = { 0x00, };
 	unsigned int ce147_len_set_object_tracking = 7;
 	unsigned char ce147_buf_check_object_tracking[9] = { 0x00, };
-	unsigned int ce147_len_check_object_tracking = 9;
 	unsigned char ce147_buf_stop_lens[1] = { 0x00 };	
 	//unsigned char ce147_buf_get_af_status[1] = { 0x00 };
 
@@ -3137,17 +3236,11 @@ static int ce147_set_object_tracking(struct v4l2_subdev *sd, struct v4l2_control
 		}
 
 		/* Read status whether AF Tracking is successful or fail */
-		for(count = 0; count < 300; count++)
-		{
-			msleep(10);
-			ce147_buf_check_object_tracking[0] = 0xFF;
-			err = ce147_i2c_read_multi(client, CMD_CHECK_OT, NULL, 0, ce147_buf_check_object_tracking, ce147_len_check_object_tracking);
+			err = ce147_waitfordone_timeout_multi(client, CMD_CHECK_OT, chartocomp, 2, 3000, LOOP_POLL_TIME_MS);
 			if(err < 0){
-				dev_err(&client->dev, "%s: failed: i2c_read for object_tracking\n", __func__);
-				return -EIO;
+				dev_err(&client->dev, "%s: Wait for get_focus_mode failed\n", __func__ );
+				return err;
 			}
-			if(ce147_buf_check_object_tracking[0] == 0x02 || ce147_buf_check_object_tracking[0] == 0x03) break;
-		}	
 
 		/* OT status: searching an object in progess */
 		if(ce147_buf_check_object_tracking[0] == 0x01)
@@ -3975,6 +4068,7 @@ static int ce147_set_auto_focus(struct v4l2_subdev *sd, struct v4l2_control *ctr
 	int err;
 #if 0
 	int count;
+	unsigned char chartocomp[2] = { 0x00, 0x02};
 #endif
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 
@@ -3991,21 +4085,7 @@ static int ce147_set_auto_focus(struct v4l2_subdev *sd, struct v4l2_control *ctr
 		}
 #if 0
 		//status check whether AF searching is successful or not 
-		for(count = 0; count < 600; count++)
-		{
-			msleep(10);
-			ce147_buf_get_af_status[0] = 0xFF;
-			err = ce147_i2c_read_multi(client, CMD_CHECK_AUTO_FOCUS_SEARCH, NULL, 0, ce147_buf_get_af_status, 1);
-			if(err < 0){
-				dev_err(&client->dev, "%s: failed: i2c_read for auto_focus\n", __func__);
-				return -EIO;
-			}
-			if(ce147_buf_get_af_status[0] == 0x05) continue;
-			if(ce147_buf_get_af_status[0] == 0x00 || ce147_buf_get_af_status[0] == 0x02) break;
-		}	
-		
-		if(ce147_buf_get_af_status[0] == 0x00)
-		{
+			err = ce147_waitfordone_timeout_multi(client, CMD_CHECK_AUTO_FOCUS_SEARCH, chartocomp, 2, 3000, LOOP_POLL_TIME_MS);
 			if(err < 0){
 				dev_err(&client->dev, "%s: failed: AF is failed\n", __func__);
 				return -EIO;

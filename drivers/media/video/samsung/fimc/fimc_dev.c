@@ -48,7 +48,6 @@ extern int hw_version_check(void);
 
 struct fimc_global *fimc_dev;
 struct s3c_platform_camera cam_struct_g;
-
 int fimc_dma_alloc(struct fimc_control *ctrl, struct fimc_buf_set *bs, int i, int align)
 {
 	dma_addr_t end, *curr;
@@ -57,11 +56,15 @@ int fimc_dma_alloc(struct fimc_control *ctrl, struct fimc_buf_set *bs, int i, in
 
 	end = ctrl->mem.base + ctrl->mem.size;
 	curr = &ctrl->mem.curr;
-
+//SG
+	dev_err(ctrl->dev, "%s: CHECKPOINT1 ALLOC MEMORY\n",__func__);
 	if (!bs->length[i])
 		return -EINVAL;
 
+	dev_err(ctrl->dev, "%s: CHECKPOINT2 ALLOC MEMORY\n",__func__);
+
 	if (!align) {
+	dev_err(ctrl->dev, "%s: CHECKPOINT3A ALLOC MEMORY\n",__func__);
 		if (*curr + bs->length[i] > end) {
 			goto overflow;
 		} else {
@@ -70,6 +73,7 @@ int fimc_dma_alloc(struct fimc_control *ctrl, struct fimc_buf_set *bs, int i, in
 			*curr += bs->length[i];
 		}
 	} else {
+	dev_err(ctrl->dev, "%s: CHECKPOINT3B ALLOC MEMORY\n",__func__);
 		if (ALIGN(*curr, align) + bs->length[i] > end)
 			goto overflow;
 		else {
@@ -80,6 +84,7 @@ int fimc_dma_alloc(struct fimc_control *ctrl, struct fimc_buf_set *bs, int i, in
 	}
 
 	mutex_unlock(&ctrl->lock);
+	dev_err(ctrl->dev, "%s: CHECKPOINT4 ALLOC MEMORY\n",__func__);
 
 	return 0;
 
@@ -89,6 +94,7 @@ overflow:
 	bs->garbage[i] = 0;
 
 	mutex_unlock(&ctrl->lock);
+	dev_err(ctrl->dev, "%s: CHECKPOINT5 ALLOC MEMORY\n",__func__);
 
 	return -ENOMEM;
 }
