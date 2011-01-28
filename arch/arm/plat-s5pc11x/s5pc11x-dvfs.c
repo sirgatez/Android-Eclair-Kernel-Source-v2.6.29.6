@@ -46,12 +46,14 @@
 unsigned int dvfs_change_direction;
 #define CLIP_LEVEL(a, b) (a > b ? b : a)
 
-unsigned int MAXFREQ_LEVEL_SUPPORTED = 6;
-unsigned int S5PC11X_MAXFREQLEVEL = 6;
+unsigned int MAXFREQ_LEVEL_SUPPORTED = 7;
+unsigned int S5PC11X_MAXFREQLEVEL = 7;
+unsigned int DVFS_HIGH_LOCK_LIMIT_TOUCH = 4;
+
 unsigned int S5PC11X_FREQ_TAB;
 //static spinlock_t g_cpufreq_lock = SPIN_LOCK_UNLOCKED;
-static unsigned int s5pc11x_cpufreq_level = 6;
-unsigned int s5pc11x_cpufreq_index = 1;
+static unsigned int s5pc11x_cpufreq_level = 7;
+unsigned int s5pc11x_cpufreq_index = 3;
 
 static char cpufreq_governor_name[CPUFREQ_NAME_LEN] = "conservative";// default governor
 static char userspace_governor[CPUFREQ_NAME_LEN] = "userspace";
@@ -68,7 +70,7 @@ static DECLARE_DELAYED_WORK(dvfs_info_print_work, inform_dvfs_clock_status);
 #if ENABLE_DVFS_LOCK_HIGH
 unsigned int g_dvfs_high_lock_token = 0;
 static DEFINE_MUTEX(dvfs_high_lock);
-unsigned int g_dvfs_high_lock_limit = 4;
+unsigned int g_dvfs_high_lock_limit = 0;
 unsigned int g_dvfslockval[NUMBER_OF_LOCKTOKEN];
 
 #endif //ENABLE_DVFS_LOCK_HIGH
@@ -80,25 +82,27 @@ extern unsigned int gbTransitionLogEnable;
 
 /* frequency */
 static struct cpufreq_frequency_table s5pc110_freq_table_1GHZ[] = {
-	{0, 1200*1000},
-	{1, 1000*1000},
-	{2, 800*1000},
-	{3, 600*1000},
-	{4, 400*1000},
-	{5, 200*1000},
-	{6, 100*1000},
+	{0, 1300*1000},
+	{1, 1200*1000},
+	{2, 1000*1000},
+	{3, 800*1000},
+	{4, 600*1000},
+	{5, 400*1000},
+	{6, 200*1000},
+	{7, 100*1000},
 	{0, CPUFREQ_TABLE_END},
 };
 
 /*Assigning different index for fast scaling up*/
 static unsigned char transition_state_1GHZ[][2] = {
-        {1, 0},
-        {2, 0},
-        {3, 1},
-        {4, 1},
-        {5, 2},
-		{6, 2},
-		{6, 2}
+        {1, 0}, /* Slot 0: 1.3Ghz : Down->1 / Up->0 */
+        {2, 0}, /* Slot 1: 1.2Ghz : Down->2 / Up->1 */
+        {3, 1}, /* Slot 2: 1.0Ghz : Down->3 / Up->2 */
+        {4, 2}, /* Slot 3: 0.8Ghz : Down->4 / Up->3 */
+        {5, 3}, /* Slot 4: 0.6Ghz : Down->5 / Up->4 */
+        {6, 4}, /* Slot 5: 0.4Ghz : Down->7 / Up->5 */
+		{7, 5}, /* Slot 6: 0.2Ghz : Down->7 / Up->6 */
+		{7, 5}  /* Slot 7: 0.1Ghz : Down->7 / Up->6 */
 };
 
 /* frequency */
@@ -131,13 +135,14 @@ static struct cpufreq_frequency_table *s5pc110_freq_table[] = {
 
 static unsigned int s5pc110_thres_table_1GHZ[][2] = {
 //	down threshold, up threshold
-        {65, 90},
-        {60, 85},
-        {50, 80},
-        {50, 80},
-        {30, 75},
-        {30, 75},
-        {30, 75},
+        {90, 99}, /* 1.3Ghz */
+        {85, 95}, /* 1.2Ghz */
+        {70, 90}, /* 1.0Ghz */
+        {60, 80}, /* 0.8Ghz */
+        {50, 70}, /* 0.6Ghz */
+        {40, 60}, /* 0.4Ghz */
+        {30, 50}, /* 0.2Ghz */
+        {10, 40}, /* 0.1Ghz */
 };
 
 static unsigned int s5pc110_thres_table_800MHZ[][2] = {
@@ -182,6 +187,29 @@ void set_dvfs_perf_level(void)
 		else 
 			s5pc11x_cpufreq_index = 1; 
 		dvfs_change_quick = 1;
+	}
+	//spin_unlock_irqrestore(&g_cpufreq_lock, irqflags);
+	sdvfs_unlock(&dvfs_perf_lock);
+
+}
+
+void set_dvfs_perf_level_touchscreen(void) 
+{
+	//unsigned long irqflags;
+
+	sdvfs_lock(&dvfs_perf_lock);
+	//spin_lock_irqsave(&g_cpufreq_lock, irqflags);
+	if(s5pc11x_cpufreq_index >= (S5PC11X_MAXFREQLEVEL - 2)) {
+		if (S5PC11X_FREQ_TAB) {
+			if (s5pc11x_cpufreq_index <= DVFS_HIGH_LOCK_LIMIT_TOUCH) {
+				s5pc11x_cpufreq_index = DVFS_HIGH_LOCK_LIMIT_TOUCH;
+			}
+		} else {
+			if (s5pc11x_cpufreq_index <= DVFS_HIGH_LOCK_LIMIT_TOUCH) {
+				s5pc11x_cpufreq_index = DVFS_HIGH_LOCK_LIMIT_TOUCH;
+			}
+		dvfs_change_quick = 1;
+		}
 	}
 	//spin_unlock_irqrestore(&g_cpufreq_lock, irqflags);
 	sdvfs_unlock(&dvfs_perf_lock);
@@ -677,7 +705,7 @@ void s5pc11x_cpufreq_performance(struct early_suspend *h)
 	}
 	return;
 }
-
+#if 0
 static struct early_suspend s5pc11x_freq_suspend = {
 	.suspend = s5pc11x_cpufreq_powersave,
 	.resume = s5pc11x_cpufreq_performance,
@@ -685,7 +713,7 @@ static struct early_suspend s5pc11x_freq_suspend = {
 };
 #endif
 #endif //CONFIG_HAS_WAKELOCK
-
+#endif
 
 unsigned int get_min_cpufreq(void)
 {	unsigned int frequency;
@@ -747,8 +775,8 @@ static int __init s5pc110_cpu_init(struct cpufreq_policy *policy)
 	if(s5pc110_verion==1){
 		printk("%s, EVT1 1Ghz Enable\n",__func__);
 		S5PC11X_FREQ_TAB = 0;
-		S5PC11X_MAXFREQLEVEL = 6;
-		MAXFREQ_LEVEL_SUPPORTED = 6;
+		S5PC11X_MAXFREQLEVEL = 7;
+		MAXFREQ_LEVEL_SUPPORTED = 7;
 		g_dvfs_high_lock_limit = 4;
 	}
 	else

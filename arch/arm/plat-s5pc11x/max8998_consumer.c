@@ -78,13 +78,16 @@ enum PMIC_VOLTAGE {
 static const unsigned int frequency_match_1GHZ[][2] = {
 /* frequency, Mathced VDD ARM voltage , Matched VDD INT*/
 #if 1
-        {1275, 1100},	/* 1.2GHz 1275UV/1325NV */
-        {1250, 1100},	/* 1.0GHz 1250UV/1300NV */
-        {1150, 1100},	/* 0.8GHz 1150UV/1200NV */
-        {1050, 1100},	/* 0.6GHz 1050UV/1100NV */
-        {1000, 1100},	/* 0.4GHz 1000UV/1050NV */
-        { 900, 1100},	/* 0.2GHz  900UV/ 950NV */
-        { 900, 1000},	/* 0.1GHz  900UV/ 950NV */
+						/* Speed    UV  /  LV  /  NV  /  HV  /  IV    */
+						/*        UltLo / Low  / Norm / High / Insane */
+        {1275, 1100},	/* 1.3GHz 1275UV/1300LV/1325NV/1350HV/1375IV  */
+        {1275, 1100},	/* 1.2GHz 1275UV/1300LV/1325NV/1350HV/1375IV  */
+        {1250, 1100},	/* 1.0GHz 1250UV/1275LV/1300NV/1325HV/1350IV  */
+        {1150, 1100},	/* 0.8GHz 1150UV/1175LV/1200NV/1225HV/1250IV  */
+        {1050, 1100},	/* 0.6GHz 1050UV/1075LV/1100NV/1125HV/1150IV  */
+        {1000, 1100},	/* 0.4GHz 1000UV/1025LV/1050NV/1075HV/1100IV  */
+        { 900, 1100},	/* 0.2GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
+        { 900, 1000},	/* 0.1GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
 #else //just for dvs test
         {1000000, 1250, 1100, 0},
         {800000, 1250, 1100, 1},
@@ -96,10 +99,12 @@ static const unsigned int frequency_match_1GHZ[][2] = {
 
 static const unsigned int frequency_match_800MHZ[][2] = {
 /* frequency, Mathced VDD ARM voltage , Matched VDD INT*/
-        {1150, 1100},	/* 0.8GHz 	1150UV/1200NV */
-        {1000, 1100},	/* 0.4GHz 	1000UV/1050NV */
-        { 900, 1100},	/* 0.2GHz 	 900UV/ 950NV */
-        { 900, 1000},	/* 0.1GHz 	 900UV/ 950NV */
+						/* Speed    UV  /  LV  /  NV  /  HV  /  IV    */
+						/*        UltLo / Low  / Norm / High / Insane */
+        {1150, 1100},	/* 0.8GHz 1150UV/1175LV/1200NV/1225HV/1250IV  */
+        {1000, 1100},	/* 0.4GHz 1000UV/1025LV/1050NV/1075HV/1100IV  */
+        { 900, 1100},	/* 0.2GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
+        { 900, 1000},	/* 0.1GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
 };
 const unsigned int (*frequency_match[2])[2] = {
         frequency_match_1GHZ,
@@ -107,10 +112,11 @@ const unsigned int (*frequency_match[2])[2] = {
 };
 
 /*  voltage table */
-static const unsigned int voltage_table[16] = {
-	750, 800, 850, 900, 950, 1000, 1050,
-	1100, 1150, 1200, 1250, 1300, 1350,
-	1400, 1450, 1500
+static const unsigned int voltage_table[20] = {
+    750, 800, 850, 900, 950, 975, 1000, 
+    1025, 1050, 1100, 1150, 1175, 1200, 
+    1250, 1275, 1300, 1350, 1400, 1450, 
+    1500
 };
 
 extern unsigned int S5PC11X_FREQ_TAB;
@@ -127,24 +133,19 @@ unsigned long set3_gpio;
 static const unsigned int dvs_volt_table_800MHZ[][3] = {
         {L0, DVSARM2, DVSINT1},
         {L1, DVSARM3, DVSINT1},
- //266       {L2, DVSARM3, DVSINT1},
         {L2, DVSARM4, DVSINT1},
         {L3, DVSARM4, DVSINT2},
-//        {L4, DVSARM4, DVSINT2},
-//        {L5, DVSARM4, DVSINT2},
 };
 
 static const unsigned int dvs_volt_table_1GHZ[][3] = {
-        {0, DVSARM1, DVSINT1},//DVSINT0
-		{1, DVSARM1, DVSINT1},
-        {2, DVSARM2, DVSINT1},
+        {0, DVSARM1, DVSINT1},
+        {1, DVSARM1, DVSINT1},
+		{2, DVSARM1, DVSINT1},
         {3, DVSARM2, DVSINT1},
-        {4, DVSARM3, DVSINT1},
- //266       {L3, DVSARM3, DVSINT1},
-        {5, DVSARM4, DVSINT1},
-        {6, DVSARM4, DVSINT2},
-//        {L5, DVSARM4, DVSINT2},
-//        {L6, DVSARM4, DVSINT2},
+        {4, DVSARM2, DVSINT1},
+        {5, DVSARM3, DVSINT1},
+        {6, DVSARM4, DVSINT1},
+        {7, DVSARM4, DVSINT2},
 };
 
 
@@ -154,12 +155,12 @@ const unsigned int (*dvs_volt_table[2])[3] = {
 };
 
 static const unsigned int dvs_arm_voltage_set[][2] = {
-	{DVSARM1, 1275},	/* 1.0GHz	1250UV/1300NV */
-	{DVSARM2, 1200},	/* 0.8GHz 	1150UV/1200NV */
-	{DVSARM3, 1050},	/* 0.6GHz 	1050UV/1100NV */
-	{DVSARM4, 950},		/* 0.2-1GHz  900UV/ 950NV */
-	{DVSINT1, 1100},
-	{DVSINT2, 1000},
+	{DVSARM1, 1275},	/* 1.0GHz	1275NV */
+	{DVSARM2, 1200},	/* 0.8GHz 	1200NV */
+	{DVSARM3, 1050},	/* 0.6GHz 	1050NV */
+	{DVSARM4, 950},		/* 0.2-1GHz  950NV */
+	{DVSINT1, 1100},	/* 0.2Ghz+  1100NV */
+	{DVSINT2, 1000},    /* 0.1Ghz   1000NV */
 };
 
 static int set_max8998(unsigned int pwr, enum perf_level p_lv)

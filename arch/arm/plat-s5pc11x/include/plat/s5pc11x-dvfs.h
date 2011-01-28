@@ -29,18 +29,19 @@
 extern unsigned int s5pc11x_cpufreq_index;
 extern unsigned int S5PC11X_FREQ_TAB;
 extern unsigned int S5PC11X_MAXFREQLEVEL;
-
+extern unsigned int DVFS_HIGH_LOCK_LIMIT_TOUCH;
 
 extern unsigned int s5pc11x_target_frq(unsigned int pred_freq, int flag);
 extern int s5pc110_pm_target(unsigned int target_freq);
 extern int is_conservative_gov(void);
 extern int is_userspace_gov(void);
 extern void set_dvfs_perf_level(void);
+extern void set_dvfs_perf_level_touchscreen(void);
 extern int set_voltage(enum perf_level p_lv);
 extern int set_voltage_dvs(enum perf_level p_lv);
 
 #if 0
-#define S5PC100_LOCKHCLK_USBHOST		0xE2000001
+#define S5PC100_LOCKHCLK_USBHOST	0xE2000001
 #define S5PC100_LOCKHCLK_USBOTG		0xE2000002
 #define S5PC100_LOCKHCLK_SDMMC0		0xE2000004
 #define S5PC100_LOCKHCLK_SDMMC1		0xE2000008

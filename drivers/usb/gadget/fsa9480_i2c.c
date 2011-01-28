@@ -495,7 +495,7 @@ int connectivity_switching_init_state=0;
 u32 set_phone_dump_stat(int state)
 {
     dpram_dump_on = state;
-    return 1;
+    return 0;
 }
 
 EXPORT_SYMBOL(set_phone_dump_stat);
