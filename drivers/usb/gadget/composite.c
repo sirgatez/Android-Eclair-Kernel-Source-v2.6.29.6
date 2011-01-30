@@ -441,8 +441,7 @@ static int set_config(struct usb_composite_dev *cdev,
 		struct usb_function	*f = c->interface[tmp];
 
 		if (!f)
-			//break;
-			continue;
+			continue; //break;
 
 		result = f->set_alt(f, tmp, 0);
 		if (result < 0) {

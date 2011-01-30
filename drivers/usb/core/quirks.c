@@ -32,8 +32,7 @@ static const struct usb_device_id usb_quirk_list[] = {
 	{ USB_DEVICE(0x0204, 0x6025), .driver_info = USB_QUIRK_RESET_RESUME },
 
 	/* HP 5300/5370C scanner */
-	{ USB_DEVICE(0x03f0, 0x0701), .driver_info =
-			USB_QUIRK_STRING_FETCH_255 },
+	{ USB_DEVICE(0x03f0, 0x0701), .driver_info = USB_QUIRK_STRING_FETCH_255 },
 
 	/* Creative SB Audigy 2 NX */
 	{ USB_DEVICE(0x041e, 0x3020), .driver_info = USB_QUIRK_RESET_RESUME },
@@ -51,8 +50,7 @@ static const struct usb_device_id usb_quirk_list[] = {
 	{ USB_DEVICE(0x05ac, 0x021a), .driver_info = USB_QUIRK_RESET_RESUME },
 
 	/* Avision AV600U */
-	{ USB_DEVICE(0x0638, 0x0a13), .driver_info =
-	  USB_QUIRK_STRING_FETCH_255 },
+	{ USB_DEVICE(0x0638, 0x0a13), .driver_info = USB_QUIRK_STRING_FETCH_255 },
 
 	/* Saitek Cyborg Gold Joystick */
 	{ USB_DEVICE(0x06a3, 0x0006), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
@@ -64,8 +62,7 @@ static const struct usb_device_id usb_quirk_list[] = {
 	{ USB_DEVICE(0x0971, 0x2000), .driver_info = USB_QUIRK_NO_SET_INTF },
 
 	/* Action Semiconductor flash disk */
-	{ USB_DEVICE(0x10d6, 0x2200), .driver_info =
-			USB_QUIRK_STRING_FETCH_255 },
+	{ USB_DEVICE(0x10d6, 0x2200), .driver_info = USB_QUIRK_STRING_FETCH_255 },
 
 	/* SKYMEDI USB_DRIVE */
 	{ USB_DEVICE(0x1516, 0x8628), .driver_info = USB_QUIRK_RESET_RESUME },

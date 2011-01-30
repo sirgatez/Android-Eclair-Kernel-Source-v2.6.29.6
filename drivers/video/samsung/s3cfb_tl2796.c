@@ -35,11 +35,11 @@
 #define SLEEPMSEC		0x1000
 #define ENDDEF			0x2000
 #define	DEFMASK			0xFF00
-#define COMMAND_ONLY		0xFE
+#define COMMAND_ONLY	0xFE
 #define DATA_ONLY		0xFF
 
-#define DIM_BL	20
-#define MIN_BL	30
+#define DIM_BL	5
+#define MIN_BL	10
 #define MAX_BL	255
 
 #define MAX_GAMMA_VALUE	24	// we have 25 levels. -> 16 levels -> 24 levels

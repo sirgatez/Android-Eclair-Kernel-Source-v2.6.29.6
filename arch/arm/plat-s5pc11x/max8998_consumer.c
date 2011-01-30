@@ -82,10 +82,11 @@ static const unsigned int frequency_match_1GHZ[][2] = {
 						/*        UltLo / Low  / Norm / High / Insane */
         {1275, 1100},	/* 1.3GHz 1275UV/1300LV/1325NV/1350HV/1375IV  */
         {1275, 1100},	/* 1.2GHz 1275UV/1300LV/1325NV/1350HV/1375IV  */
+        {1275, 1100},	/* 1.1GHz 1275UV/1300LV/1325NV/1350HV/1375IV  */
         {1250, 1100},	/* 1.0GHz 1250UV/1275LV/1300NV/1325HV/1350IV  */
-        {1150, 1100},	/* 0.8GHz 1150UV/1175LV/1200NV/1225HV/1250IV  */
-        {1050, 1100},	/* 0.6GHz 1050UV/1075LV/1100NV/1125HV/1150IV  */
-        {1000, 1100},	/* 0.4GHz 1000UV/1025LV/1050NV/1075HV/1100IV  */
+        {1175, 1100},	/* 0.8GHz 1150UV/1175LV/1200NV/1225HV/1250IV  */
+        {1075, 1100},	/* 0.6GHz 1050UV/1075LV/1100NV/1125HV/1150IV  */
+        {1025, 1100},	/* 0.4GHz 1000UV/1025LV/1050NV/1075HV/1100IV  */
         { 900, 1100},	/* 0.2GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
         { 900, 1000},	/* 0.1GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
 #else //just for dvs test
@@ -101,10 +102,10 @@ static const unsigned int frequency_match_800MHZ[][2] = {
 /* frequency, Mathced VDD ARM voltage , Matched VDD INT*/
 						/* Speed    UV  /  LV  /  NV  /  HV  /  IV    */
 						/*        UltLo / Low  / Norm / High / Insane */
-        {1150, 1100},	/* 0.8GHz 1150UV/1175LV/1200NV/1225HV/1250IV  */
-        {1000, 1100},	/* 0.4GHz 1000UV/1025LV/1050NV/1075HV/1100IV  */
-        { 900, 1100},	/* 0.2GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
-        { 900, 1000},	/* 0.1GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
+        {1175, 1100},	/* 0.8GHz 1150UV/1175LV/1200NV/1225HV/1250IV  */
+        {1025, 1100},	/* 0.4GHz 1000UV/1025LV/1050NV/1075HV/1100IV  */
+        { 950, 1100},	/* 0.2GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
+        { 950, 1000},	/* 0.1GHz  900UV/ 925LV/ 950NV/ 975HV/1000IV  */
 };
 const unsigned int (*frequency_match[2])[2] = {
         frequency_match_1GHZ,
@@ -138,14 +139,15 @@ static const unsigned int dvs_volt_table_800MHZ[][3] = {
 };
 
 static const unsigned int dvs_volt_table_1GHZ[][3] = {
-        {0, DVSARM1, DVSINT1},
-        {1, DVSARM1, DVSINT1},
-		{2, DVSARM1, DVSINT1},
-        {3, DVSARM2, DVSINT1},
-        {4, DVSARM2, DVSINT1},
-        {5, DVSARM3, DVSINT1},
-        {6, DVSARM4, DVSINT1},
-        {7, DVSARM4, DVSINT2},
+        {0, DVSARM1, DVSINT1}, /* 1.3Ghz */
+        {1, DVSARM1, DVSINT1}, /* 1.2Ghz */
+        {2, DVSARM1, DVSINT1}, /* 1.1Ghz */
+		{3, DVSARM1, DVSINT1}, /* 1.0Ghz */
+        {4, DVSARM2, DVSINT1}, /* 0.8Ghz */
+        {5, DVSARM2, DVSINT1}, /* 0.6Ghz */
+        {6, DVSARM3, DVSINT1}, /* 0.4Ghz */
+        {7, DVSARM4, DVSINT1}, /* 0.2Ghz */
+        {8, DVSARM4, DVSINT2}, /* 0.1Ghz */
 };
 
 
@@ -155,7 +157,7 @@ const unsigned int (*dvs_volt_table[2])[3] = {
 };
 
 static const unsigned int dvs_arm_voltage_set[][2] = {
-	{DVSARM1, 1275},	/* 1.0GHz	1275NV */
+	{DVSARM1, 1275},	/* 1.0GHz+	1275NV */
 	{DVSARM2, 1200},	/* 0.8GHz 	1200NV */
 	{DVSARM3, 1050},	/* 0.6GHz 	1050NV */
 	{DVSARM4, 950},		/* 0.2-1GHz  950NV */

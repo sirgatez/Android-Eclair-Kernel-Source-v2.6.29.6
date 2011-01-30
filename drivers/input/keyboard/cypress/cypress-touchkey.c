@@ -59,6 +59,9 @@ Melfas touchkey register
 #define BACKLIGHT_OFF 2
 #endif
 
+//#define PRINT_NOTIFICATION_LIGHT_STATUS 1
+
+
 static int touchkey_keycode[5] = {NULL, KEY_BACK, KEY_MENU, KEY_ENTER, KEY_END};
 //static struct input_dev *touchkey_dev;
 static int touchkey_enable = 0;
@@ -737,7 +740,9 @@ static void enable_led_notification(void){
 	    /* write to i2cbus, enable backlights */
 	    set_backlight(BACKLIGHT_ON);
 	    
+	    #if defined(PRINT_NOTIFICATION_LIGHT_STATUS)
 	    printk(KERN_DEBUG "%s: notification led enabled\n", __FUNCTION__);
+	    #endif
 	} 
 	else
 	    printk(KERN_DEBUG "%s: cannot set notification led, touchkeys are enabled\n",__FUNCTION__);
@@ -745,7 +750,9 @@ static void enable_led_notification(void){
 }
 
 static void disable_led_notification(void){
+    #if defined(PRINT_NOTIFICATION_LIGHT_STATUS)
     printk(KERN_DEBUG "%s: notification led disabled\n", __FUNCTION__);
+    #endif
     /* disable touchkey vdd in sleep mode */
     BacklightNotification_enabled = false;
     
@@ -801,7 +808,9 @@ static ssize_t notification_led_status_write(struct device *dev, struct device_a
 
     if(sscanf(buf, "%u\n", &data) == 1) {
 	if(data == 0 || data == 1){
+	    #if defined(PRINT_NOTIFICATION_LIGHT_STATUS)
 	    printk(KERN_DEBUG "%s: %u \n", __FUNCTION__, data);
+	    #endif
 	    if (data == 1)
 		enable_led_notification();
 

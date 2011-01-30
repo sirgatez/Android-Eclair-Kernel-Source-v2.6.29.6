@@ -185,7 +185,7 @@ irqreturn_t bt_host_wake_irq_handler(int irq, void *dev_id)
 }
 
 
-static int __ref jupiter_rfkill_probe(struct platform_device *pdev)
+static int __init jupiter_rfkill_probe(struct platform_device *pdev)
 {
 	int rc = 0;
 	int irq,ret;
@@ -293,7 +293,7 @@ static int bluetooth_set_sleep(void *data, enum rfkill_state state)
 	return 0;
 }
 
-static int __ref jupiter_btsleep_probe(struct platform_device *pdev)
+static int __init jupiter_btsleep_probe(struct platform_device *pdev)
 {
 	int rc = 0;
 

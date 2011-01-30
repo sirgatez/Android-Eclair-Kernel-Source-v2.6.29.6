@@ -8500,7 +8500,7 @@ void  get_message(struct work_struct * p)
 
 						if(i == 0){
 							s5pc110_unlock_dvfs_high_level(DVFS_LOCK_TOKEN_4);
-							set_dvfs_perf_level_touchscreen();
+							set_dvfs_perf_level();
 							touch_state_val=0;
 							}
 						fingerInfo[i].pressure= 0;
@@ -8593,7 +8593,7 @@ void  get_message(struct work_struct * p)
 			#if USE_PERF_LEVEL_TS
 				if(id == 0){
 					s5pc110_unlock_dvfs_high_level(DVFS_LOCK_TOKEN_4);
-					set_dvfs_perf_level_touchscreen();
+					set_dvfs_perf_level();
 					touch_state_val=0;
 					}
 			#endif
@@ -8602,7 +8602,7 @@ void  get_message(struct work_struct * p)
 				fingerInfo[id].size_id= (id<<8)|size;
 				fingerInfo[id].pressure= 0;
 				bChangeUpDn= 1;
-				#if QUANTUM_GENERAL_MESSAGES
+				#if defined(QUANTUM_GENERAL_MESSAGES)
 					printk(KERN_DEBUG "[TSP]### Finger[%d] Up (%d,%d) - touch num is (%d)  status=0x%02x\n", id, fingerInfo[id].x, fingerInfo[id].y , --qt_touch_num_state[id], quantum_msg[1]);
 				#endif
 			}
@@ -8612,8 +8612,8 @@ void  get_message(struct work_struct * p)
 			#ifdef CONFIG_CPU_FREQ
 			#if USE_PERF_LEVEL_TS
 				if(id == 0){
-					set_dvfs_perf_level_touchscreen();
-					s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,4);
+					set_dvfs_perf_level();
+					s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,return_dvfs_perf_level_touchscreen);
 					touch_state_val=1;
 					}
 			#endif
@@ -8627,7 +8627,7 @@ void  get_message(struct work_struct * p)
 				fingerInfo[id].x= (int16_t)x;
 				fingerInfo[id].y= (int16_t)y;
 				bChangeUpDn= 1;
-				#if QUANTUM_GENERAL_MESSAGES
+				#if defined(QUANTUM_GENERAL_MESSAGES)
 					printk(KERN_DEBUG "[TSP]### Finger[%d] Down (%d,%d) - touch num is (%d)   status=0x%02x\n", id, fingerInfo[id].x, fingerInfo[id].y , ++qt_touch_num_state[id], quantum_msg[1] );
 				#endif
 			}
@@ -8649,8 +8649,8 @@ void  get_message(struct work_struct * p)
 			#ifdef CONFIG_CPU_FREQ
 			#if USE_PERF_LEVEL_TS
 			if(id == 0){
-				set_dvfs_perf_level_touchscreen();
-				s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,4);
+				set_dvfs_perf_level();
+				s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,return_dvfs_perf_level_touchscreen);
 				}
 			#endif
 			#endif
@@ -8672,7 +8672,7 @@ void  get_message(struct work_struct * p)
 			#if USE_PERF_LEVEL_TS
 				if(id == 0){
 				s5pc110_unlock_dvfs_high_level(DVFS_LOCK_TOKEN_4);
-				set_dvfs_perf_level_touchscreen();
+				set_dvfs_perf_level();
 					}
 			#endif
 			#endif
@@ -8725,8 +8725,8 @@ void  get_message(struct work_struct * p)
 				else if( fingerInfo[i].pressure > 0 ) one_touch_input_flag++;//hugh 0312
 			}
 			input_sync(qt602240->input_dev);
-			#if QUANTUM_GENERAL_MESSAGES
-			pr_err("[Touch]pressed = %d, X = %d, Y = %d\n",fingerInfo[0].pressure,fingerInfo[0].x,fingerInfo[0].y);			
+			#if defined(QUANTUM_GENERAL_MESSAGES)
+				pr_err("[Touch]pressed = %d, X = %d, Y = %d\n",fingerInfo[0].pressure,fingerInfo[0].x,fingerInfo[0].y);			
 			#endif
 	//		printk("\n");
 	//		printk("##### Multi-Touch Event[%d] Done!\n", amplitude );
@@ -8743,13 +8743,13 @@ void  get_message(struct work_struct * p)
 
 		input_sync(qt602240->input_dev);
 		amplitude = quantum_msg[6];
-		#if QUANTUM_GENERAL_MESSAGES
-		dprintk("[TSP]%s x=%3d, y=%3d, BTN=%d, size=%d, amp=%d\n",__FUNCTION__, x, y,press, size , amplitude);
+		#if defined(QUANTUM_GENERAL_MESSAGES)
+			dprintk("[TSP]%s x=%3d, y=%3d, BTN=%d, size=%d, amp=%d\n",__FUNCTION__, x, y,press, size , amplitude);
 		#endif
 
 #ifdef CONFIG_CPU_FREQ
 #if USE_PERF_LEVEL_TS
-		set_dvfs_perf_level_touchscreen();
+		set_dvfs_perf_level();
 #endif
 #endif
 
@@ -8758,7 +8758,7 @@ void  get_message(struct work_struct * p)
 	{
 		input_sync(qt602240->input_dev);
 		amplitude = quantum_msg[6];
-		#if QUANTUM_GENERAL_MESSAGES
+		#if defined(QUANTUM_GENERAL_MESSAGES)
 			dprintk("[TSP]%s x=%3d, y=%3d, BTN=%d, size=%d, amp=%d\n",__FUNCTION__, x, y,press, size , amplitude);
 		#endif
 	}

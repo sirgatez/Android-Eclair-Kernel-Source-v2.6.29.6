@@ -20,7 +20,7 @@
 #include <plat/regs-clock.h>
 #include <mach/gpio-jupiter.h>
 #include "wm8994.h"
- #include "wm8994_voodoo.h"
+#include "wm8994_voodoo.h"
 #include <mach/sec_jack.h>
 
 //------------------------------------------------

@@ -39,6 +39,7 @@ extern void set_dvfs_perf_level(void);
 extern void set_dvfs_perf_level_touchscreen(void);
 extern int set_voltage(enum perf_level p_lv);
 extern int set_voltage_dvs(enum perf_level p_lv);
+extern unsigned int return_dvfs_perf_level_touchscreen(void);
 
 #if 0
 #define S5PC100_LOCKHCLK_USBHOST	0xE2000001

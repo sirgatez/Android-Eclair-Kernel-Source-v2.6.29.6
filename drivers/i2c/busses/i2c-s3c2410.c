@@ -515,7 +515,7 @@ static int s3c24xx_i2c_doxfer(struct s3c24xx_i2c *i2c,
 
 	/* ensure the stop has been through the bus */
 
-	udelay(10); //1
+	msleep(1);
 
  out:
 	return ret;
