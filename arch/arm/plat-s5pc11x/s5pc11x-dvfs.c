@@ -46,10 +46,10 @@
 unsigned int dvfs_change_direction;
 #define CLIP_LEVEL(a, b) (a > b ? b : a)
 
-unsigned int MAXFREQ_LEVEL_SUPPORTED = 8;
-unsigned int S5PC11X_MAXFREQLEVEL = 8;
+unsigned int MAXFREQ_LEVEL_SUPPORTED	= 8;
+unsigned int S5PC11X_MAXFREQLEVEL	= 8;
 
-unsigned int FREQ_MAX_SAFE = (600*1000);
+unsigned int FREQ_MAX_SAFE 		= (600*1000);
 unsigned int FREQ_FORCE_TOUCHSCREEN	= (600*1000);
 
 unsigned int S5PC11X_FREQ_TAB;
@@ -140,15 +140,15 @@ static struct cpufreq_frequency_table *s5pc110_freq_table[] = {
 
 static unsigned int s5pc110_thres_table_1GHZ[][2] = {
 //	down threshold, up threshold
-        {91, 99}, /* 1.3Ghz */
-        {88, 96}, /* 1.2Ghz */
-        {85, 93}, /* 1.1Ghz */
-        {80, 90}, /* 1.0Ghz */
-        {75, 85}, /* 0.8Ghz */
-        {70, 80}, /* 0.6Ghz */
-        {65, 75}, /* 0.4Ghz */
-        {50, 70}, /* 0.2Ghz */
-        {10, 55}, /* 0.1Ghz */
+        {98, 99}, /* 1.3Ghz */
+        {94, 97}, /* 1.2Ghz */
+        {90, 93}, /* 1.1Ghz */
+        {83, 89}, /* 1.0Ghz */
+        {75, 82}, /* 0.8Ghz */
+        {70, 74}, /* 0.6Ghz */
+        {65, 69}, /* 0.4Ghz */
+        {50, 64}, /* 0.2Ghz */
+        {40, 49}, /* 0.1Ghz */
 };
 
 static unsigned int s5pc110_thres_table_800MHZ[][2] = {
