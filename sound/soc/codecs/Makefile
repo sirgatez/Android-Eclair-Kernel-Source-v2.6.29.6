@@ -24,14 +24,10 @@ snd-soc-wm8900-objs := wm8900.o
 snd-soc-wm8903-objs := wm8903.o
 snd-soc-wm8971-objs := wm8971.o
 snd-soc-wm8990-objs := wm8990.o
-ifeq ($(CONFIG_ARIES_NTT),y)
-snd-soc-wm8994-objs := wm8994.o wm8994_s1ntt.o
-else
 ifeq ($(CONFIG_SND_VOODOO),y)
 snd-soc-wm8994-objs := wm8994.o wm8994_aries.o wm8994_voodoo.o
 else
 snd-soc-wm8994-objs := wm8994.o wm8994_aries.o
-endif
 endif
 snd-soc-wm9712-objs := wm9712.o
 snd-soc-wm9713-objs := wm9713.o

@@ -34,7 +34,7 @@
 
 #define PMIC_ARM		0
 #define PMIC_INT		1
-#define PMIC_BOTH	2
+#define PMIC_BOTH		2
 
 unsigned int step_curr;
 

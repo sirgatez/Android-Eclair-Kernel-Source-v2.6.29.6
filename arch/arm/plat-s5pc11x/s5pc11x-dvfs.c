@@ -49,7 +49,7 @@ unsigned int dvfs_change_direction;
 unsigned int MAXFREQ_LEVEL_SUPPORTED = 8;
 unsigned int S5PC11X_MAXFREQLEVEL = 8;
 
-unsigned int FREQ_MAX_SAFE = (1000*1000);
+unsigned int FREQ_MAX_SAFE = (600*1000);
 unsigned int FREQ_FORCE_TOUCHSCREEN	= (600*1000);
 
 unsigned int S5PC11X_FREQ_TAB;
@@ -106,8 +106,8 @@ static unsigned char transition_state_1GHZ[][2] = {
         {5, 3}, /* Slot 4: 0.8Ghz : Down->5 / Up->3 */
         {6, 4}, /* Slot 5: 0.6Ghz : Down->6 / Up->4 */
         {7, 5}, /* Slot 6: 0.4Ghz : Down->7 / Up->5 */
-		{8, 6}, /* Slot 7: 0.2Ghz : Down->8 / Up->6 */
-		{8, 7}  /* Slot 7: 0.1Ghz : Down->8 / Up->6 */
+	{8, 6}, /* Slot 7: 0.2Ghz : Down->8 / Up->6 */
+	{8, 6}  /* Slot 7: 0.1Ghz : Down->8 / Up->6 */
 };
 
 /* frequency */
@@ -145,10 +145,10 @@ static unsigned int s5pc110_thres_table_1GHZ[][2] = {
         {85, 93}, /* 1.1Ghz */
         {80, 90}, /* 1.0Ghz */
         {75, 85}, /* 0.8Ghz */
-        {65, 80}, /* 0.6Ghz */
-        {55, 70}, /* 0.4Ghz */
-        {45, 60}, /* 0.2Ghz */
-        {10, 50}, /* 0.1Ghz */
+        {70, 80}, /* 0.6Ghz */
+        {65, 75}, /* 0.4Ghz */
+        {50, 70}, /* 0.2Ghz */
+        {10, 55}, /* 0.1Ghz */
 };
 
 static unsigned int s5pc110_thres_table_800MHZ[][2] = {

@@ -87,7 +87,7 @@ static const u32 s5p_sysout_clk_tab_1GHZ[][4] = {
 static const u32 s5p_sys_clk_div0_tab_1GHZ[][DIV_TAB_MAX_FIELD] = {
         {0, 6, 6, 1, 3, 1, 4, 1, 3, 3, 0, 3}, /* 1.3Ghz - */
         {0, 5, 5, 1, 3, 1, 4, 1, 3, 3, 0, 3}, /* 1.2Ghz - APLL=1.200GHz, MPLL=667MHz, ARMCLK=1.200GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
-        {0, 5, 5, 1, 3, 1, 4, 1, 3, 3, 0, 3}, /* 1.1Ghz - */
+        {0, 5, 5, 1, 3, 1, 4, 1, 3, 3, 0, 3}, /* 1.1Ghz - should work with 1.0 dividers investigate */
         {0, 4, 4, 1, 3, 1, 4, 1, 3, 3, 0, 3}, /* 1.0Ghz - APLL=1.000GHz, MPLL=667MHz, ARMCLK=1.000GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
         {0, 3, 3, 1, 3, 1, 4, 1, 3, 3, 0, 3}, /* 0.8Ghz - APLL=0.800GHz, MPLL=667MHz, ARMCLK=0.800GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
         {0, 2, 2, 1, 3, 1, 4, 1, 2, 2, 0, 3}, /* 0.6Ghz - APLL=0.600GHz, MPLL=667MHz, ARMCLK=0.600GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz NEED VERIFY*/

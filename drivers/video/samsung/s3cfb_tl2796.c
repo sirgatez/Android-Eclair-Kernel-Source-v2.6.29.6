@@ -38,8 +38,9 @@
 #define COMMAND_ONLY	0xFE
 #define DATA_ONLY		0xFF
 
-#define DIM_BL	5
-#define MIN_BL	10
+#define DIM_BL	20
+#define MIN_BL	30
+#define LOW_BL  40
 #define MAX_BL	255
 
 #define MAX_GAMMA_VALUE	24	// we have 25 levels. -> 16 levels -> 24 levels
@@ -3697,12 +3698,14 @@ static int s5p_bl_update_status(struct backlight_device* bd)
 				bl = DIM_BL;
 		}
 	#endif
-		if(bl == 0)
+		if(bl == 0) {
 			level = 0;	//lcd off
-		else if((bl < MIN_BL) && (bl > 0))
+		} else if((bl < LOW_BL) && (bl > 0)) {
+			bl = 10;
 			level = 1;	//dimming
-		else
+		} else {
 			level = 6;	//normal
+		}
 
 		if(level==0)
 		{
@@ -3715,11 +3718,11 @@ static int s5p_bl_update_status(struct backlight_device* bd)
 			return 0;
 		}	
 
-		if (bl >= MIN_BL)
+		if (bl >= LOW_BL)
 		{
-			gamma_val_x10 = 10*(MAX_GAMMA_VALUE-1)*bl/(MAX_BL-MIN_BL) + (10 - 10*(MAX_GAMMA_VALUE-1)*(MIN_BL)/(MAX_BL-MIN_BL)) ;
+			gamma_val_x10 = 10*(MAX_GAMMA_VALUE-1)*bl/(MAX_BL-MIN_BL) + (10 - 10*(MAX_GAMMA_VALUE-1)*(MIN_BL)/(MAX_BL-MIN_BL));
 			gamma_value = (gamma_val_x10+5)/10;
-		}	
+		}
 		else
 		{
 			gamma_value = 0;
@@ -3732,6 +3735,7 @@ static int s5p_bl_update_status(struct backlight_device* bd)
 		{
 			return 0;
 		}
+		pr_err("NEW brightness=%d, backlight=%d, level=%d\n", bd_brightness, backlight_level, level);
 		pr_err("bl=%d, gamma_value=%d, acl_enable=%d\n", bl,gamma_value,acl_enable);
 			
 	 	if(level)
