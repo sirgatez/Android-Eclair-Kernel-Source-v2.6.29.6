@@ -1518,7 +1518,7 @@ register_framebuffer(struct fb_info *fb_info)
 	event.info = fb_info;
 	if (!lock_fb_info(fb_info))
 		return -ENODEV;
-//	fb_notifier_call_chain(FB_EVENT_FB_REGISTERED, &event);
+	fb_notifier_call_chain(FB_EVENT_FB_REGISTERED, &event);
 	unlock_fb_info(fb_info);
 	return 0;
 }
