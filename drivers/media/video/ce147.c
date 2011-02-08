@@ -1625,6 +1625,8 @@ static int ce147_set_preview_size(struct v4l2_subdev *sd)
 	return err;	
 }
 
+#if 0
+/* Not Referenced */
 static int ce147_set_fps(struct v4l2_subdev *sd)
 {
 	int err;
@@ -1648,6 +1650,7 @@ static int ce147_set_fps(struct v4l2_subdev *sd)
 
 	return 0;
 }
+#endif
 
 static int ce147_set_frame_rate(struct v4l2_subdev *sd)
 {

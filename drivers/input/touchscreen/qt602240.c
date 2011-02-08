@@ -5407,9 +5407,11 @@ static uint16_t command_processor_address;
 /*! Flag indicating if driver setup is OK. */
 static enum driver_setup_t driver_setup = DRIVER_SETUP_INCOMPLETE;
 
+#if 0
+/* Not Referenced */
 /*! Pointer to message handler provided by main app. */
 static void (*application_message_handler)(void);
-
+#endif
 
 /*! \brief The current address pointer. */
 static U16 address_pointer;
@@ -8418,7 +8420,7 @@ void  get_message(struct work_struct * p)
 
 #ifdef _SUPPORT_MULTITOUCH_
 	static int nPrevID= -1;
-	uint8_t id;
+	uint8_t id = 0;
 	int bChangeUpDn= 0;
 #endif
 
@@ -8613,7 +8615,7 @@ void  get_message(struct work_struct * p)
 			#if USE_PERF_LEVEL_TS
 				if(id == 0){
 					set_dvfs_perf_level();
-					s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,return_dvfs_perf_level_touchscreen);
+					s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,return_dvfs_perf_level_touchscreen());
 					touch_state_val=1;
 					}
 			#endif
@@ -8650,7 +8652,7 @@ void  get_message(struct work_struct * p)
 			#if USE_PERF_LEVEL_TS
 			if(id == 0){
 				set_dvfs_perf_level();
-				s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,return_dvfs_perf_level_touchscreen);
+				s5pc110_lock_dvfs_high_level(DVFS_LOCK_TOKEN_4,return_dvfs_perf_level_touchscreen());
 				}
 			#endif
 			#endif
@@ -9543,7 +9545,7 @@ uint8_t QT_Boot(void)
 		unsigned char retry_cnt;
 		//unsigned long f_size;
 		unsigned long int character_position;
-		unsigned int frame_size;
+		unsigned int frame_size = 0;
 		unsigned int next_frame;
 		unsigned int crc_error_count;
 		//unsigned char *rd_msg;
@@ -9700,7 +9702,7 @@ uint8_t QT_Boot_no_reset(void)
 	unsigned char boot_ver;
 	unsigned char retry_cnt;
 	unsigned short character_position;
-	unsigned short frame_size;
+	unsigned short frame_size = 0;
 	unsigned short next_frame;
 	unsigned short crc_error_count;
 	//unsigned char *rd_msg;

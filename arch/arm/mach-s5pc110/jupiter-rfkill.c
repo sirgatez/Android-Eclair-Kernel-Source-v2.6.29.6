@@ -232,7 +232,7 @@ static int __init jupiter_rfkill_probe(struct platform_device *pdev)
 	return rc;
 }
 
-static struct platform_driver jupiter_device_rfkill = {
+static struct platform_driver __refdata jupiter_device_rfkill = {
 	.probe = jupiter_rfkill_probe,
 	.driver = {
 		.name = "bt_rfkill",
@@ -321,7 +321,7 @@ static int __init jupiter_btsleep_probe(struct platform_device *pdev)
 	return rc;
 }
 
-static struct platform_driver jupiter_device_btsleep = {
+static struct platform_driver __refdata jupiter_device_btsleep = {
 	.probe = jupiter_btsleep_probe,
 	.driver = {
 		.name = "bt_sleep",

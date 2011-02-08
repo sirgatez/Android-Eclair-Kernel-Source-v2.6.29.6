@@ -391,7 +391,7 @@ static int acm_only_bind_config(struct usb_configuration *c)
 #endif
 
 
-static struct usb_configuration android_config  = {
+static struct usb_configuration __refdata android_config  = {
 	.label		= ANDROID_NO_DEBUG_UMS_CONFIG_STRING,
 	.bind		= android_bind_config,
 	.bConfigurationValue = 1,
@@ -1150,7 +1150,7 @@ static int __init android_probe(struct platform_device *pdev)
 	return 0;
 }
 
-static struct platform_driver android_platform_driver = {
+static struct platform_driver __refdata android_platform_driver = {
 	.driver = { .name = "C110 Android USB", },
 	.probe = android_probe,
 };

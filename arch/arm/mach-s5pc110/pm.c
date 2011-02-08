@@ -82,11 +82,13 @@ static struct sleep_save s5pc110_sleep[] = {
 
 };
 
+#if 0
 static int s5pc110_pm_suspend(struct sys_device *dev, pm_message_t state)
 {
 	s5pc11x_pm_do_save(s5pc110_sleep, ARRAY_SIZE(s5pc110_sleep));
 	return 0;
 }
+#endif
 
 static int s5pc110_pm_resume(struct sys_device *dev)
 {

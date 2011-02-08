@@ -143,6 +143,7 @@ static inline cputime64_t get_cpu_idle_time(unsigned int cpu, cputime64_t *wall)
  * Returns the freq_hi to be used right now and will set freq_hi_jiffies,
  * freq_lo, and freq_lo_jiffies in percpu area for averaging freqs.
  */
+#if !defined(CONFIG_CPU_S5PC110)
 static unsigned int powersave_bias_target(struct cpufreq_policy *policy,
 					  unsigned int freq_next,
 					  unsigned int relation)
@@ -191,6 +192,7 @@ static unsigned int powersave_bias_target(struct cpufreq_policy *policy,
 	dbs_info->freq_hi_jiffies = jiffies_hi;
 	return freq_hi;
 }
+#endif
 
 static void ondemand_powersave_bias_init(void)
 {

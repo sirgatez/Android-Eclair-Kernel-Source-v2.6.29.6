@@ -2272,13 +2272,14 @@ void MAX8998_IRQ_init(void)
 
 	hrtimer_init(&charger_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 	charger_timer.function = charger_timer_func;
-/*
+#if 0
+	/* Not Referenced */
 	hrtimer_init(&pm_sys_init_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 	pm_sys_init_timer.function = pm_sys_init_done;
 	hrtimer_start(&pm_sys_init_timer,
 					ktime_set(30000 / 1000, (30000 % 1000) * 1000000),
 					HRTIMER_MODE_REL);
-*/
+#endif
 	lpm_mode_check();
 
 	ret = request_irq(PMIC_IRQ, pmic_irq, IRQF_PROBE_SHARED|IRQF_DISABLED, "pmic irq", 0);
@@ -3105,6 +3106,8 @@ void maxim_batt_check(void)
 	Set_MAX8998_PM_ADDR(CHGR1, reg_buff, 2); 
 }
 
+#if 0
+/* Not Referenced */
 static enum hrtimer_restart pm_sys_init_done(struct hrtimer *timer)
 {
 	//hrtimer_cancel(timer);
@@ -3112,6 +3115,7 @@ static enum hrtimer_restart pm_sys_init_done(struct hrtimer *timer)
 	//printk("%s \n",__func__);
 	return HRTIMER_NORESTART;
 }
+#endif
 
 int pm_get_sys_init_status(void)
 {

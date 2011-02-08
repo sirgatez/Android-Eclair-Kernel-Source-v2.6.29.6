@@ -257,11 +257,14 @@ static int max8998_get_ldo(struct regulator_dev *rdev)
 	return rdev_get_id(rdev);
 }
 
+#if 0
+/* Not Referenced */
 static int max8998_ldo_list_voltage(struct regulator_dev *rdev, unsigned selector)
 {
 	int ldo = max8998_get_ldo(rdev);
 	return 1000 * ldo_voltage_map[ldo][selector];
 }
+#endif
 
 static int max8998_ldo_is_enabled(struct regulator_dev *rdev)
 {

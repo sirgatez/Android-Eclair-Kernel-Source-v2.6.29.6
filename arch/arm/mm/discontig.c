@@ -21,7 +21,7 @@
  * Our node_data structure for discontiguous memory.
  */
 
-pg_data_t discontig_node_data[MAX_NUMNODES] = {
+pg_data_t __refdata discontig_node_data[MAX_NUMNODES] = {
   { .bdata = &bootmem_node_data[0] },
   { .bdata = &bootmem_node_data[1] },
   { .bdata = &bootmem_node_data[2] },

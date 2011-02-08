@@ -1734,7 +1734,8 @@ static s5p_tv_sd_err __s5p_sdout_init_antialias_filter_coeff_default(s5p_sd_leve
 
 }
 
-
+#if 0
+/* Not Referenced */
 static s5p_tv_sd_err __s5p_sdout_init_oversampling_filter_coeff_default(s5p_tv_o_mode out_mode)
 {
 	u32 temp_reg = 0;
@@ -1817,6 +1818,7 @@ static s5p_tv_sd_err __s5p_sdout_init_oversampling_filter_coeff_default(s5p_tv_o
 
 	return SDOUT_NO_ERROR;
 }
+#endif
 
 /*
 * initialization

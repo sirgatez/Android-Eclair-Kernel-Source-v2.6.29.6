@@ -83,6 +83,7 @@ extern void SetXRESStrong(void);
 extern void ApplyTargetVDD(void);
 extern void RemoveTargetVDD(void);
 extern void SetTargetVDDStrong(void);
+extern int ISSP_main(void);
 
 extern unsigned char   fIsError;
 

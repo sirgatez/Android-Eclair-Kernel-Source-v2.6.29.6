@@ -1082,6 +1082,7 @@ int s3c2410_dma_ctrl(unsigned int channel, enum s3c_chan_op op)
 
 	case S3C2410_DMAOP_PAUSE:
 	case S3C2410_DMAOP_RESUME:
+	case S3C2410_DMAOP_ABORT:
 		return -ENOENT;
 
 	case S3C2410_DMAOP_FLUSH:

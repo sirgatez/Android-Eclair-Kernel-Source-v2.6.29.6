@@ -978,6 +978,8 @@ EXPORT_SYMBOL(s5p_power_gating);
  * Initailize power domain at booting 
  * 
 */
+#if 0
+/* Not Referenced */
 static void s5p_init_domain_power(void)
 {
 #if 0
@@ -987,6 +989,7 @@ static void s5p_init_domain_power(void)
 	s5p_power_gating(S5PC110_POWER_DOMAIN_G3D, DOMAIN_LP_MODE);
 #endif
 }
+#endif
 
 #endif //CONFIG_PM_PWR_GATING
 

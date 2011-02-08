@@ -270,6 +270,8 @@ static irqreturn_t s3c_keygpio_vol_up_isr(int irq, void *dev_id)
         return IRQ_HANDLED;
 }
 
+#if 0
+/* Not Referenced */
 //EINT26
 static irqreturn_t s3c_keygpio_vol_up26_isr(int irq, void *dev_id)
 {
@@ -288,6 +290,7 @@ static irqreturn_t s3c_keygpio_vol_up26_isr(int irq, void *dev_id)
        
         return IRQ_HANDLED;
 }
+#endif
 
 static irqreturn_t s3c_keygpio_vol_down_isr(int irq, void *dev_id)
 {
@@ -309,6 +312,9 @@ static irqreturn_t s3c_keygpio_vol_down_isr(int irq, void *dev_id)
 }
 
 extern void TSP_forced_release_forOKkey(void);
+
+#if 0
+/* Not Referenced */
 static irqreturn_t s3c_keygpio_ok_isr(int irq, void *dev_id)
 {
 	unsigned int key_status;
@@ -328,6 +334,7 @@ static irqreturn_t s3c_keygpio_ok_isr(int irq, void *dev_id)
         
         return IRQ_HANDLED;
 }
+#endif
 
 extern unsigned int HWREV;
 
@@ -470,7 +477,7 @@ static ssize_t keyshort_test(struct device *dev, struct device_attribute *attr, 
     if(/*!gpio_get_value(GPIO_KBR0) || !gpio_get_value(GPIO_KBR1) || !gpio_get_value(GPIO_KBR2) || */ mask)
 	{
 		count = sprintf(buf,"PRESS\n");
-              printk("keyshort_test: PRESS\n",mask);
+              printk("keyshort_test: PRESS %d\n",mask);
 	}
 	else
 	{

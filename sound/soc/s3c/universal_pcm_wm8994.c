@@ -48,9 +48,11 @@
 #define debug_msg(x...)
 #endif
 extern struct s5p_pcm_pdata s3c_pcm_pdat;
-static int smdkc110_play_opt;
-static int smdkc110_rec_opt;
+//static int smdkc110_play_opt;
+//static int smdkc110_rec_opt;
 
+#if 0
+/* Not Referenced */
 static int smdkc110_set_pcm_clk(int id)
 {
         switch(id)
@@ -73,6 +75,7 @@ static int smdkc110_set_pcm_clk(int id)
         }
         return 0;
 }
+#endif
 
 static int smdkc110_set_gpio(int id)
 {
@@ -335,6 +338,8 @@ static struct snd_soc_ops smdkc110_ops = {
 	.hw_params = smdkc110_hw_params,
 };
 
+#if 0
+/* Not Referenced */
 static void smdkc110_ext_control(struct snd_soc_codec *codec)
 {
 	debug_msg("%s\n", __FUNCTION__);
@@ -368,6 +373,8 @@ static void smdkc110_ext_control(struct snd_soc_codec *codec)
 	/* signal a DAPM event */
 	snd_soc_dapm_sync(codec);
 }
+#endif
+
 #if 0
 static int smdkc110_get_pt(struct snd_kcontrol *kcontrol,
 	struct snd_ctl_elem_value *ucontrol)

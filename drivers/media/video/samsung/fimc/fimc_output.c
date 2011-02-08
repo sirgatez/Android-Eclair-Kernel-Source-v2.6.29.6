@@ -155,7 +155,7 @@ int fimc_init_out_buf(struct fimc_control *ctrl, enum v4l2_memory mem_type, __u3
 	int width = ctrl->out->pix.width; 
 	int height = ctrl->out->pix.height;
 	u32 format = ctrl->out->pix.pixelformat;
-	u32 y_size, cbcr_size = 0, rgb_size, total_size = 0, i, offset;
+	u32 y_size = 0, cbcr_size = 0, rgb_size, total_size = 0, i, offset;
 	u32 base = ctrl->mem.base;
 
 	/* VIDIOC_S_FMT should be called before VIDIOC_REQBUFS*/

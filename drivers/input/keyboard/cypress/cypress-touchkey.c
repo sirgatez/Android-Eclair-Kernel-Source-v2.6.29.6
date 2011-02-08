@@ -62,7 +62,7 @@ Melfas touchkey register
 //#define PRINT_NOTIFICATION_LIGHT_STATUS 1
 
 
-static int touchkey_keycode[5] = {NULL, KEY_BACK, KEY_MENU, KEY_ENTER, KEY_END};
+static int touchkey_keycode[5] = {(int) NULL, KEY_BACK, KEY_MENU, KEY_ENTER, KEY_END};
 //static struct input_dev *touchkey_dev;
 static int touchkey_enable = 0;
 
@@ -149,9 +149,9 @@ static void touchkey_power_off_with_i2c(void){
 
 static int i2c_touchkey_read(u8 reg, u8 *val, unsigned int len)
 {
-	int 	 err;
-       int     retry = 10;
-	struct 	 i2c_msg msg[1];
+	int err = 0;
+	int retry = 10;
+	struct i2c_msg msg[1];
 	
 	if((touchkey_driver == NULL))
 	{
@@ -178,7 +178,7 @@ static int i2c_touchkey_read(u8 reg, u8 *val, unsigned int len)
 
 static int i2c_touchkey_write(u8 *val, unsigned int len)
 {
-	int err;
+	int err = 0;
 	struct i2c_msg msg[1];
 	unsigned char data[2];
        int     retry = 2;
@@ -629,7 +629,7 @@ static ssize_t touch_update_write(struct device *dev, struct device_attribute *a
 
 static ssize_t touch_update_read(struct device *dev, struct device_attribute *attr, char *buf)
 {
-	int count;
+	int count = 0;
 
 	printk("touch_update_read: touchkey_update_status %d\n", touchkey_update_status);
 	
@@ -897,7 +897,7 @@ static int __init touchkey_init(void)
 	ret = 0;
 	ret = misc_register(&backlightnotification_device);
 	if (ret) {
-		printk("%s misc_register fail\n", __FUNCTION__, backlightnotification_device.name);
+		printk("%s misc_register fail with %s\n", __FUNCTION__, backlightnotification_device.name);
 	}
 	//add the backlightnotification attributes
 	if (device_create_file(backlightnotification_device.this_device, &dev_attr_enabled) < 0)

@@ -36,7 +36,6 @@ extern int s5pc110_pm_target(unsigned int target_freq);
 extern int is_conservative_gov(void);
 extern int is_userspace_gov(void);
 extern void set_dvfs_perf_level(void);
-extern void set_dvfs_perf_level_touchscreen(void);
 extern int set_voltage(enum perf_level p_lv);
 extern int set_voltage_dvs(enum perf_level p_lv);
 extern unsigned int return_dvfs_perf_level_touchscreen(void);
