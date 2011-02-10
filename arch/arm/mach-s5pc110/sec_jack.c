@@ -95,7 +95,7 @@ struct switch_dev switch_sendend = {
 };
 
 static unsigned int send_end_irq_token = 0;
-static unsigned short int current_jack_type_status = 0;
+static unsigned int current_jack_type_status = 0;
 static struct timer_list send_end_enable_timer;
 static struct wake_lock jack_sendend_wake_lock;
 
@@ -602,7 +602,7 @@ static int sec_jack_probe(struct platform_device *pdev)
 
 	input = hi->input = input_allocate_device();
 	if (!input) 
-{
+	{
 		ret = -ENOMEM;
 		printk(KERN_ERR "SEC HEADSET: Failed to allocate input device.\n");
 		goto err_request_input_dev;
@@ -674,9 +674,9 @@ static int sec_jack_probe(struct platform_device *pdev)
 
 	//GPIO configuration for Detect
 	det_jack = &hi->port.det_jack;
-    s3c_gpio_cfgpin(det_jack->gpio, S3C_GPIO_SFN(det_jack->gpio_af));
-    s3c_gpio_setpull(det_jack->gpio, S3C_GPIO_PULL_NONE);
-    set_irq_type(det_jack->eint, IRQ_TYPE_EDGE_BOTH);
+	s3c_gpio_cfgpin(det_jack->gpio, S3C_GPIO_SFN(det_jack->gpio_af));
+	s3c_gpio_setpull(det_jack->gpio, S3C_GPIO_PULL_NONE);
+	set_irq_type(det_jack->eint, IRQ_TYPE_EDGE_BOTH);
 	
 	ret = request_irq(det_jack->eint, detect_irq_handler,IRQF_DISABLED, "sec_headset_detect", NULL);
 
