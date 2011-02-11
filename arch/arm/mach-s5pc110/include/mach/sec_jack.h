@@ -18,17 +18,17 @@
 #define SEC_HEADSET_ADC_CHANNEL 3
 enum
 {
-	SEC_JACK_NO_DEVICE					= 0x0,
+	SEC_JACK_NO_DEVICE				= 0x0,
 	SEC_HEADSET_4_POLE_DEVICE			= 0x01 << 0,	
 	SEC_HEADSET_3_POLE_DEVICE			= 0x01 << 1,
 //doesn't use below 3 dev.	
-	SEC_TTY_DEVICE						= 0x01 << 2,
-	SEC_FM_HEADSET						= 0x01 << 3,
-	SEC_FM_SPEAKER						= 0x01 << 4,	
-	SEC_TVOUT_DEVICE					= 0x01 << 5,
+	SEC_TTY_DEVICE					= 0x01 << 2,
+	SEC_FM_HEADSET					= 0x01 << 3,
+	SEC_FM_SPEAKER					= 0x01 << 4,	
+	SEC_TVOUT_DEVICE				= 0x01 << 5,
 	SEC_EXTRA_DOCK_SPEAKER				= 0x01 << 6,	
 	SEC_EXTRA_CAR_DOCK_SPEAKER			= 0x01 << 7,		
-	SEC_UNKNOWN_DEVICE					= 0x01 << 8,	
+	SEC_UNKNOWN_DEVICE				= 0x01 << 8,	
 };
 
 enum
