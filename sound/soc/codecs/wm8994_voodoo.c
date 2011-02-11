@@ -39,6 +39,10 @@ bool fm_radio_headset_restore_highs = true;
 bool fm_radio_headset_normalize_gain = true;
 #endif
 
+#ifdef CONFIG_SND_VOODOO_HEADPHONE_STICK
+unsigned short headphone_stick = 0;
+#endif
+
 #ifdef CONFIG_SND_VOODOO_RECORD_PRESETS
 unsigned short recording_preset = 1;
 #endif
@@ -301,6 +305,30 @@ static ssize_t headphone_amplifier_level_store(struct device *dev, struct device
 }
 #endif
 
+#ifdef CONFIG_SND_VOODOO_HEADPHONE_STICK
+unsigned short headphone_stick_check(void)
+{
+	// 1 is on all SPK is routed to HP
+	// 0 of off all routing is normal
+	return headphone_stick;
+}
+static ssize_t headphone_stick_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	// 1 is on all SPK is routed to HP
+	// 0 of off all routing is normal
+	return sprintf(buf,"%u\n",(headphone_stick ? 1 : 0));
+}
+
+static ssize_t headphone_stick_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)
+{
+	unsigned short state;
+	if (sscanf(buf, "%hu", &state) == 1)
+	{
+		headphone_stick = state == 0 ? 0 : 1;
+	}
+	return size;
+}
+#endif
 
 #ifdef CONFIG_SND_VOODOO_FM
 static ssize_t fm_radio_headset_restore_bass_show(struct device *dev, struct device_attribute *attr, char *buf)
@@ -523,6 +551,9 @@ static DEVICE_ATTR(fm_radio_headset_restore_bass, S_IRUGO | S_IWUGO , fm_radio_h
 static DEVICE_ATTR(fm_radio_headset_restore_highs, S_IRUGO | S_IWUGO , fm_radio_headset_restore_highs_show, fm_radio_headset_restore_highs_store);
 static DEVICE_ATTR(fm_radio_headset_normalize_gain, S_IRUGO | S_IWUGO , fm_radio_headset_normalize_gain_show, fm_radio_headset_normalize_gain_store);
 #endif
+#ifdef CONFIG_SND_VOODOO_HEADPHONE_STICK
+static DEVICE_ATTR(headphone_stick, S_IRUGO | S_IWUGO , headphone_stick_show, headphone_stick_store);
+#endif
 #ifdef CONFIG_SND_VOODOO_RECORD_PRESETS
 static DEVICE_ATTR(recording_preset, S_IRUGO | S_IWUGO , recording_preset_show, recording_preset_store);
 #endif
@@ -544,6 +575,9 @@ static struct attribute *voodoo_sound_attributes[] = {
 		&dev_attr_fm_radio_headset_restore_bass.attr,
 		&dev_attr_fm_radio_headset_restore_highs.attr,
 		&dev_attr_fm_radio_headset_normalize_gain.attr,
+#endif
+#ifdef CONFIG_SND_VOODOO_HEADPHONE_STICK
+		&dev_attr_headphone_stick.attr,
 #endif
 #ifdef CONFIG_SND_VOODOO_RECORD_PRESETS
 		&dev_attr_recording_preset.attr,

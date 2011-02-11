@@ -551,11 +551,29 @@ static int wm8994_get_playback_path(struct snd_kcontrol *kcontrol,
 
 static int wm8994_set_playback_path(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
-    struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
+	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm8994_priv *wm8994 = codec->private_data;
 	struct soc_enum *mc = (struct soc_enum *)kcontrol->private_value;
 	int val;
 	int path_num = ucontrol->value.integer.value[0];
+
+	#ifdef CONFIG_SND_VOODOO_HEADPHONE_STICK
+	unsigned int headset_status = get_headset_status();
+	enum playback_path path_current = wm8994->cur_path;
+
+	DEBUG_LOG("Sound Routing Change Request From %s To %s, headphone status %d \n", mc->texts[path_num], mc->texts[path_current], headset_status );
+
+	if (headphone_stick_check()) {
+		/* Check if a headjack is plugged in and if so do not switch to external speaker for mere audio playback */
+		if (headset_status == SEC_HEADSET_4_POLE_DEVICE || headset_status == SEC_HEADSET_3_POLE_DEVICE) {
+			if (path_num == SPK || path_num == RING_SPK || path_num == RING_DUAL) {
+				DEBUG_LOG("PLACEHOLDER: not routing to %s, headjack plugged in, re-routing to %s \n", mc->texts[path_num], mc->texts[HP]);
+				path_num = HP;
+			}
+		}
+	}
+	#endif
+
 
 	//select the requested path from the array of function pointers
 	switch(path_num)
@@ -569,33 +587,30 @@ static int wm8994_set_playback_path(struct snd_kcontrol *kcontrol, struct snd_ct
 		case HP:	
 		case BT:
 		case DUAL :
-			DEBUG_LOG("routing to %s \n", mc->texts[path_num] );
+			DEBUG_LOG("A: routing to %s \n", mc->texts[path_num] );
 			wm8994->ringtone_active = OFF;
 			break;
 
 		case RING_SPK :
 		case RING_HP :
-			DEBUG_LOG("routing to %s \n", mc->texts[path_num] );
+			DEBUG_LOG("B: routing to %s \n", mc->texts[path_num] );
 			wm8994->ringtone_active = ON;
 			path_num -= 4;
 			break;
 
 		case RING_DUAL :			
-			DEBUG_LOG("routing to %s \n", mc->texts[path_num] );
+			DEBUG_LOG("C: routing to %s \n", mc->texts[path_num] );
 			wm8994->ringtone_active = ON;
 			path_num -= 3;
 			break;			
 
 		case EXTRA_DOCK_SPEAKER:
 		case TV_OUT:
-                   FSA9480_Enable_SPK(1);
+			FSA9480_Enable_SPK(1);
 			wm8994->ringtone_active = OFF;
 			path_num -= 3;
-
-			DEBUG_LOG("routing to %s \n", mc->texts[path_num] );
-			
+			DEBUG_LOG("D: routing to %s \n", mc->texts[path_num] );
 			break;			
-
 		default:
 			DEBUG_LOG_ERR("The audio path[%d] does not exists!! \n", path_num);
 			return -ENODEV;
@@ -621,7 +636,7 @@ static int wm8994_set_playback_path(struct snd_kcontrol *kcontrol, struct snd_ct
 		val = wm8994_read(codec, WM8994_CLOCKING_1);
 		val &= ~(WM8994_DSP_FS2CLK_ENA_MASK | WM8994_SYSCLK_SRC_MASK);
 		wm8994_write(codec, WM8994_CLOCKING_1, val);
-	}    
+	}
 	wm8994->cur_path = path_num;
 
 #ifndef FEATURE_SS_AUDIO_CAL
@@ -730,20 +745,20 @@ static int wm8994_set_call_path(struct snd_kcontrol *kcontrol, struct snd_ctl_el
 
     switch(path_num)
     {
-		case PLAYBACK_OFF :
-			DEBUG_LOG("Switching off output path\n");
-            break;
-		case SPK :
-        case RCV :
-        case HP :
-        case BT :
-            DEBUG_LOG("routing  voice path to  %s \n", mc->texts[path_num] );
-            break;
-		
-        default:
-            DEBUG_LOG_ERR("The audio path[%d] does not exists!! \n", path_num);
-			return -ENODEV;
-			break;
+	case PLAYBACK_OFF :
+		DEBUG_LOG("Switching off output path\n");
+		break;
+	case SPK :
+		case RCV :
+		case HP :
+		case BT :
+		DEBUG_LOG("routing  voice path to  %s \n", mc->texts[path_num] );
+		break;
+
+		default:
+		DEBUG_LOG_ERR("The audio path[%d] does not exists!! \n", path_num);
+		return -ENODEV;
+		break;
 	}
 
 	if(wm8994->cur_path != path_num || !(wm8994->codec_state & CALL_ACTIVE))
