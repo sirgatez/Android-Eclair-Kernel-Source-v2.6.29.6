@@ -57,9 +57,9 @@
 #define DEFAULT_PIX_FMT			V4L2_PIX_FMT_UYVY	/* YUV422 */
 #define DEFUALT_MCLK			24000000
 #define CRITICAL_POLL_TIME_MS	5
-#define LOOP_POLL_TIME_MS		10
-#define POLL_TIME_MS			20
-#define WAIT_TIME_MS			20
+#define LOOP_POLL_TIME_MS		5
+#define POLL_TIME_MS			10
+#define WAIT_TIME_MS			10
 
 /* Camera ISP command */
 #define CMD_VERSION						0x00
