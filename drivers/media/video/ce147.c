@@ -56,10 +56,11 @@
 /* Default resolution & pixelformat. plz ref ce147_platform.h */
 #define DEFAULT_PIX_FMT			V4L2_PIX_FMT_UYVY	/* YUV422 */
 #define DEFUALT_MCLK			24000000
-#define CRITICAL_POLL_TIME_MS	5
-#define LOOP_POLL_TIME_MS		5
-#define POLL_TIME_MS			10
-#define WAIT_TIME_MS			10
+#define CRITICAL_POLL_TIME_MS		5
+#define LOOP_POLL_TIME_MS_DZOOM		5
+#define LOOP_POLL_TIME_MS		10
+#define POLL_TIME_MS			20
+#define WAIT_TIME_MS			20
 
 /* Camera ISP command */
 #define CMD_VERSION						0x00
@@ -1787,7 +1788,7 @@ static int ce147_set_dzoom(struct v4l2_subdev *sd, struct v4l2_control *ctrl)
 			return -EIO;
 		}
 
-		err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS);
+		err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS_DZOOM);
 		if(err < 0){
 			dev_err(&client->dev, "%s: Wait for set_dzoom failed\n", __func__ );
 			return err;
@@ -1858,7 +1859,7 @@ static int ce147_set_preview_start(struct v4l2_subdev *sd)
 				return -EIO;
 			}
 
-			err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS);
+			err = ce147_waitfordone_timeout_wide(client, CMD_GET_DZOOM_LEVEL, chartocomp, chartocheck , 2, 3000, LOOP_POLL_TIME_MS_DZOOM);
 			if(err < 0){
 				dev_err(&client->dev, "%s: Wait for set_dzoom in preview_start failed\n", __func__ );
 				return err;
